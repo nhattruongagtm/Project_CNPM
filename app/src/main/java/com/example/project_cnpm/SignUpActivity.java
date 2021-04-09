@@ -5,30 +5,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
-
-    ImageView btnLoginMain;
+public class SignUpActivity extends AppCompatActivity {
+    TextView btnChangeLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.sign_up);
 
-        btnLoginMain = findViewById(R.id.loginMain);
+        btnChangeLogin = findViewById(R.id.changeLogin);
 
-        btnLoginMain.setOnClickListener(new View.OnClickListener() {
+        btnChangeLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             }
         });
-
-
-
-
     }
 }
