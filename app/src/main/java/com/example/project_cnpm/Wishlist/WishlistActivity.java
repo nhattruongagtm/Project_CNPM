@@ -1,10 +1,12 @@
-package com.example.project_cnpm;
+package com.example.project_cnpm.Wishlist;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+
+import com.example.project_cnpm.R;
 
 import java.util.ArrayList;
 

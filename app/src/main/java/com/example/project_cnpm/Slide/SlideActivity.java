@@ -1,4 +1,4 @@
-package com.example.project_cnpm;
+package com.example.project_cnpm.Slide;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.project_cnpm.R;
 
 public class SlideActivity extends AppCompatActivity {
 

@@ -1,17 +1,16 @@
-package com.example.project_cnpm;
+package com.example.project_cnpm.Wishlist;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
+import com.example.project_cnpm.R;
 
 import java.util.ArrayList;
 

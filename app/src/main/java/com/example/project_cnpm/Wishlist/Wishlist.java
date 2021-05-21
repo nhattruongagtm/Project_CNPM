@@ -1,4 +1,4 @@
-package com.example.project_cnpm;
+package com.example.project_cnpm.Wishlist;
 
 public class Wishlist {
 

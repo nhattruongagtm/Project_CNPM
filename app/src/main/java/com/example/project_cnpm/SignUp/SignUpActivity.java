@@ -1,4 +1,4 @@
-package com.example.project_cnpm;
+package com.example.project_cnpm.SignUp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.project_cnpm.Login.LoginActivity;
+import com.example.project_cnpm.R;
 
 public class SignUpActivity extends AppCompatActivity {
     TextView btnChangeLogin;

@@ -1,4 +1,4 @@
-package com.example.project_cnpm;
+package com.example.project_cnpm.Slide;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
+
+import com.example.project_cnpm.R;
 
 public class SliderAdapter extends PagerAdapter {
 

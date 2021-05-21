@@ -9,16 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_CNPM">
-        <activity android:name=".WishlistActivity">
+        <activity android:name=".Wishlist.WishlistActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SlideActivity"></activity>
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".Slide.SlideActivity"></activity>
+        <activity android:name=".SignUp.SignUpActivity" />
+        <activity android:name=".Login.LoginActivity" />
         <activity android:name=".MainActivity">
 
         </activity>
