@@ -3,13 +3,16 @@ package com.example.project_cnpm.Slide;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.R;
 
 public class SlideActivity extends AppCompatActivity {
@@ -24,6 +27,8 @@ public class SlideActivity extends AppCompatActivity {
     private Button btnNext, btnBack;
 
     private int currentPage = 0;
+
+    int count = 0;
 
 
     @Override
@@ -86,6 +91,7 @@ public class SlideActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int position) {
 
+
             addDots(position);
 
             currentPage = position;
@@ -104,15 +110,26 @@ public class SlideActivity extends AppCompatActivity {
                 btnBack.setVisibility(View.VISIBLE);
 
                 btnNext.setText("Finish");
+                count++;
                 btnBack.setText("Back");
             }
             else{
                 btnBack.setEnabled(true);
                 btnNext.setEnabled(true);
                 btnBack.setVisibility(View.VISIBLE);
-
                 btnNext.setText("Next");
                 btnBack.setText("Back");
+            }
+            if (count != 0){
+                btnNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("AAA", "Click to MainActivity" + count);
+                        startActivity(new Intent(SlideActivity.this, LoginActivity.class));
+                        count = 0;
+                    }
+                });
+
             }
         }
 
