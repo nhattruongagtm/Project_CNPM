@@ -51,4 +51,7 @@ dependencies {
     //navigation bottom
     implementation 'com.etebarian:meow-bottom-navigation-java:1.2.0'
 
+    //facebook api
+    implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+
 }
