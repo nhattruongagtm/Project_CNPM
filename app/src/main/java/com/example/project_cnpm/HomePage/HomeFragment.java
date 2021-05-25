@@ -1,16 +1,27 @@
 package com.example.project_cnpm.HomePage;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.project_cnpm.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
@@ -20,6 +31,9 @@ public class HomeFragment extends Fragment {
 
     RecyclerView recyclerToday;
     RecyclerView recyclerRecommended;
+    GoogleSignInClient mGoogleSignInClient;
+    ImageView imgCustomer;
+
 
 
     @Override
@@ -37,14 +51,58 @@ public class HomeFragment extends Fragment {
 
          recyclerRecommended = view.findViewById(R.id.home_page_dishRecommended);
 
+        imgCustomer = view.findViewById(R.id.imgCustomer);
+
         // khởi tạo recyler view today
         createDishesToday();
         // khởi tạo recyler view recommend
         createDishesRecommended();
 
+
+        googleAPI();
+        loadCustomer(view);
+
+
+        // sign out
+        imgCustomer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
+            }
+        });
+
         return view;
 
 
+    }
+    public void signOut(){
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //
+                        //getActivity().finish();
+                    }
+                });
+    }
+    //login google
+    public void googleAPI(){
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+    }
+    public void loadCustomer(View view){
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+            Log.d("EEE",personEmail+"");
+
+            Glide.with(this).load(String.valueOf(personPhoto)).into(imgCustomer);
+        }
     }
     public void createDishesToday(){
 

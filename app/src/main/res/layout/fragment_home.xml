@@ -34,6 +34,18 @@
             android:layout_weight="200"
             android:layout_width="wrap_content"
             android:layout_height="25dp"/>
+       <androidx.cardview.widget.CardView
+           android:layout_marginRight="10dp"
+           app:cardCornerRadius="10dp"
+           android:layout_width="wrap_content"
+           android:layout_gravity="center"
+           android:layout_height="wrap_content">
+           <ImageView
+               android:id="@+id/imgCustomer"
+               android:layout_width="35dp"
+               android:layout_height="35dp"
+               android:src="@drawable/ic_baseline_account_circle_24" />
+       </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:layout_margin="5dp"
             app:cardBackgroundColor="#f8f8f8"
