@@ -1,32 +1,30 @@
-package com.example.project_cnpm.Login;
+package com.example.project_cnpm.HomePage;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.JsonReader;
+
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
+import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.R;
 import com.example.project_cnpm.SignUp.SignUpActivity;
-
+import com.example.project_cnpm.User.Customer;
+import com.example.project_cnpm.User.User;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -38,12 +36,10 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity {
-
-//    private LottieAnimationView lottieAnimationView;
+public class LoginFragment extends Fragment {
+    //    private LottieAnimationView lottieAnimationView;
     private CallbackManager callbackManager;
     private LoginButton loginButton;
 
@@ -54,33 +50,46 @@ public class LoginActivity extends AppCompatActivity {
     private int RC_SIGN_IN = 0;
     TextView btnChangeSignUp;
     LinearLayout btnBack;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
 
-        btnChangeSignUp = findViewById(R.id.changeSignUp);
-        btnBack = findViewById(R.id.btnBack_hompage);
+
+    public LoginFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_login, container, false);
+
+        btnChangeSignUp = view.findViewById(R.id.changeSignUp);
+        btnBack = view.findViewById(R.id.btnBack_hompage);
 
         btnChangeSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                startActivity(new Intent(getActivity(), SignUpActivity.class));
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+               startActivity(new Intent(getActivity(), MainActivity.class));
             }
         });
 
 
         // facebook api
         callbackManager = CallbackManager.Factory.create();
-        loginButton = findViewById(R.id.login_button);
+        loginButton = view.findViewById(R.id.login_button);
 
-        loginButton.setPublishPermissions("email");
+        loginButton.setPermissions("email");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -99,12 +108,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         //google api
-        loginGoogle();
+        loginGoogle(view);
 
+
+        return view;
     }
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode,data);
         super.onActivityResult(requestCode, resultCode, data);
         // facebook
@@ -122,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         Bundle bundle= new Bundle();
-        bundle.putString("fields","gender, name, id, firsy_name, last_name");
+        bundle.putString("fields","gender, name, id, first_name, last_name");
         graphRequest.setParameters(bundle);
         graphRequest.executeAsync();
 
@@ -145,12 +155,12 @@ public class LoginActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         accessTokenTracker.startTracking();
     }
-    public void loginGoogle(){
-        signInButton = findViewById(R.id.sign_in_button);
+    public void loginGoogle(View view){
+        signInButton = view.findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
     }
     public void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -173,17 +183,26 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
+            Intent intent = new Intent(getActivity(),MainActivity.class);
+            User user = new User();
+            user.setUsername(account.getId());
+            Customer customer = new Customer();
+            customer.setUser(user);
+            customer.setName(account.getDisplayName());
+            customer.setAvatar(account.getPhotoUrl()+"");
+            customer.setEmail(account.getEmail()+"");
+
+            intent.putExtra("account",customer);
+
+
             // Signed in successfully, show authenticated UI.
             //updateUI(account);
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(intent);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("AAA", "signInResult:failed code=" + e.getStatusCode());
-           // updateUI(null);
+            // updateUI(null);
         }
     }
-
-
-
 }

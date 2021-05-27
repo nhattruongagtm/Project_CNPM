@@ -23,7 +23,9 @@ import com.example.project_cnpm.HomePage.DishRecommendAdapter;
 import com.example.project_cnpm.HomePage.DishTodayAdapter;
 import com.example.project_cnpm.HomePage.HomeFragment;
 import com.example.project_cnpm.HomePage.NotificationFragment;
+import com.example.project_cnpm.HomePage.UserFragment;
 import com.example.project_cnpm.Login.LoginActivity;
+import com.example.project_cnpm.User.Customer;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
     // google api
     GoogleSignInClient mGoogleSignInClient;
 
+    public static Customer account;
+
+    public Customer getAccount() {
+        return account;
+    }
+
+    public void setAccount(Customer account) {
+        this.account = account;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +67,16 @@ public class MainActivity extends AppCompatActivity {
         // load customer sau khi đăng nhập
         googleAPI();
 
+        // check Session
+
     }
 
 
     public void mapping(){
         bottomNavigation = findViewById(R.id.navigation_bottom);
 
+        Intent intent = getIntent();
+        account = (Customer)intent.getSerializableExtra("account");
 
     }
     public void addMenuItem(){
@@ -78,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                     case 1: fragment = new HomeFragment();
                     break;
-                    case 3: startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                    case 3: fragment = new UserFragment();
                     break;
                 }
                 if (fragment != null) {
@@ -116,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
+                        account = null;
                         finish();
                     }
                 });
