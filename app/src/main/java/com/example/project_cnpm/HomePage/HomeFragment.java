@@ -63,6 +63,12 @@ public class HomeFragment extends Fragment {
         googleAPI();
         loadCustomer(view);
 
+        // load img
+        if(MainActivity.account!= null){
+            Glide.with(this).load(String.valueOf(MainActivity.account.getAvatar())).into(imgCustomer);
+        }
+
+
 
         // sign out
         imgCustomer.setOnClickListener(new View.OnClickListener() {

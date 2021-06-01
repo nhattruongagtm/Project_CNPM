@@ -38,6 +38,7 @@ public class User implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
+
     public String toString(){
         return username +" - "+ password+" - " + status;
     }

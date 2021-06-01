@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
     public static Customer account;
 
     public Customer getAccount() {
-        return account;
+        Intent intent = getIntent();
+        return (Customer)intent.getSerializableExtra("account");
     }
 
     public void setAccount(Customer account) {
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         // check Session
 
+
     }
 
 
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         account = (Customer)intent.getSerializableExtra("account");
+        setAccount(account);
 
     }
     public void addMenuItem(){
