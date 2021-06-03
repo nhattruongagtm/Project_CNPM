@@ -1,6 +1,6 @@
 package com.example.project_cnpm.HomePage;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,12 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.R;
-import com.example.project_cnpm.User.Customer;
-import com.example.project_cnpm.User.User;
-
-import java.io.Serializable;
+import com.example.project_cnpm.Model.Customer;
+import com.example.project_cnpm.SharedReferences.DataLocalManager;
 
 
 public class UserFragment extends Fragment {
@@ -36,9 +35,11 @@ public class UserFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_user, container, false);
 
         Fragment fragment = null;
-        Customer account = MainActivity.account;
+//        Customer account = MainActivity.account;
+        Customer account = DataLocalManager.getAccount();
         if (account == null){
-            fragment = new LoginFragment();
+          //  fragment = new LoginFragment();
+            startActivity(new Intent(getActivity(), LoginActivity.class));
         }
         else{
             fragment = new ProfileFragment();

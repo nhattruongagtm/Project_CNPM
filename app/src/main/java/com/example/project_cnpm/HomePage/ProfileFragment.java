@@ -14,7 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.R;
-import com.example.project_cnpm.User.Customer;
+import com.example.project_cnpm.Model.Customer;
+import com.example.project_cnpm.SharedReferences.DataLocalManager;
 
 public class ProfileFragment extends Fragment {
     private TextView email;
@@ -45,9 +46,9 @@ public class ProfileFragment extends Fragment {
 
         mapping(v);
 
-        Customer account = MainActivity.account;
+        Customer account = DataLocalManager.getAccount();
         if(account != null) {
-            email.setText(account.getEmail());
+            email.setText(account.getUser().getEmail());
             Log.d("EEE","email: "+account.toString()+"");
             Glide.with(getContext()).load(account.getAvatar()).into(img);
         }

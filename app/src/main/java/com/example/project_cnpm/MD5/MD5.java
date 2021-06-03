@@ -6,12 +6,17 @@ import java.security.NoSuchAlgorithmException;
 
 public class MD5 {
     public String enryptPassword(String text) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] hashInBytes = md.digest(text.getBytes(StandardCharsets.UTF_8));
-        StringBuilder sb = new StringBuilder();
-        for (byte b : hashInBytes) {
-            sb.append(String.format("%02x", b));
+        if (text.equals("")){
+            return "";
         }
-        return sb.toString();
+        else {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hashInBytes = md.digest(text.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashInBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        }
     }
 }

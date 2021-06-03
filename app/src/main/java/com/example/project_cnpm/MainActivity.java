@@ -3,56 +3,45 @@ package com.example.project_cnpm;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
-import com.example.project_cnpm.HomePage.AboutFragment;
-import com.example.project_cnpm.HomePage.Dish;
-import com.example.project_cnpm.HomePage.DishRecommendAdapter;
-import com.example.project_cnpm.HomePage.DishTodayAdapter;
 import com.example.project_cnpm.HomePage.HomeFragment;
 import com.example.project_cnpm.HomePage.NotificationFragment;
 import com.example.project_cnpm.HomePage.UserFragment;
-import com.example.project_cnpm.Login.LoginActivity;
-import com.example.project_cnpm.User.Customer;
+import com.example.project_cnpm.Model.Customer;
+import com.example.project_cnpm.SharedReferences.DataLocalManager;
+import com.example.project_cnpm.Utility.NetworkChangeListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
+
+    //kiểm tra kết nối internet
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     MeowBottomNavigation bottomNavigation;
 
     // google api
     GoogleSignInClient mGoogleSignInClient;
 
-    public static Customer account;
+  //  public static Customer account;
 
     public Customer getAccount() {
         Intent intent = getIntent();
         return (Customer)intent.getSerializableExtra("account");
     }
-
-    public void setAccount(Customer account) {
-        this.account = account;
-    }
+//
+//    public void setAccount(Customer account) {
+//        this.account = account;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +66,12 @@ public class MainActivity extends AppCompatActivity {
     public void mapping(){
         bottomNavigation = findViewById(R.id.navigation_bottom);
 
-        Intent intent = getIntent();
-        account = (Customer)intent.getSerializableExtra("account");
-        setAccount(account);
+      //  DataLocalManager.setValid(false);
+
+//        Intent intent = getIntent();
+//        account = (Customer)intent.getSerializableExtra("account");
+//        setAccount(account);
+      //  DataLocalManager.getAccount()
 
     }
     public void addMenuItem(){
@@ -135,7 +127,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
-                        account = null;
+                      //  account = null;
+                        DataLocalManager.setAccount(null);
+                        DataLocalManager.setValid(false);
                         finish();
                     }
                 });
@@ -146,5 +140,16 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
+    @Override
+    protected void onStart() {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
 
+    @Override
+    protected void onStop() {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }
 }

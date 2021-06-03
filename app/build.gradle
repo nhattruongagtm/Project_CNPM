@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
+
 }
+
 
 android {
     compileSdkVersion 30
@@ -64,6 +66,19 @@ dependencies {
     // thu vien volley
     implementation 'com.android.volley:volley:1.2.0'
 
+    // thu vien gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    // firebase
+    // Import the BoM for the Firebase platform
+//    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+//
+//    // Declare the dependency for the Realtime Database library
+//    // When using the BoM, you don't specify versions in Firebase library dependencies
+//    implementation 'com.google.firebase:firebase-database'
+
 
 
 }
+//apply plugin: 'com.google.gms.google-services'  // Google Services plugin
+

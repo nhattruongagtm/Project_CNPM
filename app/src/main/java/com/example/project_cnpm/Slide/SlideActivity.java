@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.R;
 
 public class SlideActivity extends AppCompatActivity {
@@ -125,7 +124,7 @@ public class SlideActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Log.d("AAA", "Click to MainActivity" + count);
-                        startActivity(new Intent(SlideActivity.this, LoginActivity.class));
+                      //  startActivity(new Intent(SlideActivity.this, LoginActivity.class));
                         count = 0;
                     }
                 });

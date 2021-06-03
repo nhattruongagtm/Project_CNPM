@@ -16,7 +16,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.project_cnpm.MainActivity;
+import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.R;
+import com.example.project_cnpm.SharedReferences.DataLocalManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -64,8 +66,9 @@ public class HomeFragment extends Fragment {
         loadCustomer(view);
 
         // load img
-        if(MainActivity.account!= null){
-            Glide.with(this).load(String.valueOf(MainActivity.account.getAvatar())).into(imgCustomer);
+        Customer account = DataLocalManager.getAccount();
+        if(account != null){
+            Glide.with(this).load(String.valueOf(account.getAvatar())).into(imgCustomer);
         }
 
 
@@ -74,6 +77,7 @@ public class HomeFragment extends Fragment {
         imgCustomer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DataLocalManager.setValid(false);
                 signOut();
             }
         });
@@ -88,7 +92,8 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         //
-                        MainActivity.account = null;
+                      //  MainActivity.account = null;
+                        DataLocalManager.setAccount(null);
                         //getActivity().finish();
                     }
                 });

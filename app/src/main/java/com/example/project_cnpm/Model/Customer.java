@@ -1,4 +1,5 @@
-package com.example.project_cnpm.User;
+package com.example.project_cnpm.Model;
+
 
 import java.io.Serializable;
 import java.util.Date;
@@ -7,18 +8,16 @@ public class Customer implements Serializable {
     private String idCustomer;
     private User user;
     private String name;
-    private String email;
     private String phone;
     private String address;
     private String avatar;
     private Date dateCreated;
     private int status;
 
-    public Customer(String idCustomer, User user, String name, String email, String phone, String address, String avatar, Date dateCreated, int status) {
+    public Customer(String idCustomer, User user, String name, String phone, String address, String avatar, Date dateCreated, int status) {
         this.idCustomer = idCustomer;
         this.user = user;
         this.name = name;
-        this.email = email;
         this.phone = phone;
         this.address = address;
         this.avatar = avatar;
@@ -46,13 +45,6 @@ public class Customer implements Serializable {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getPhone() {
         return phone;
@@ -109,7 +101,6 @@ public class Customer implements Serializable {
                 "idCustomer='" + idCustomer + '\'' +
                 ", user=" + user +
                 ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", avatar='" + avatar + '\'' +

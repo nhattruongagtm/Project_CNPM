@@ -34,13 +34,18 @@
                     android:textColor="#F44336"
                     android:text=""/>
                 <EditText
-                    android:id="@+id/login_username"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="5dp"
+                    android:textSize="16dp"
+                    android:id="@+id/login_username_w"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
                     android:textStyle="bold"/>
                 <EditText
-                    android:id="@+id/login_password"
+                    android:paddingLeft="5dp"
+                    android:textSize="16dp"
+                    android:id="@+id/login_password_w"
                     android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -63,7 +68,7 @@
                         android:text="Quên mật khẩu?"/>
                 </LinearLayout>
                 <Button
-                    android:id="@+id/login_btn_login"
+                    android:id="@+id/login_btn_login_fg"
                     android:background="@drawable/custom_button"
                     android:layout_marginTop="20dp"
                     android:layout_width="match_parent"

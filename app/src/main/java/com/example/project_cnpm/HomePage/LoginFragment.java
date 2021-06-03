@@ -1,6 +1,7 @@
 package com.example.project_cnpm.HomePage;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -15,25 +16,26 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.project_cnpm.Controller.ILoginController;
+import com.example.project_cnpm.Controller.LoginController;
 import com.example.project_cnpm.Login.LoginActivity;
+import com.example.project_cnpm.Login.LoginDAO;
 import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.MainActivity;
+import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.R;
-import com.example.project_cnpm.SignUp.SignUpActivity;
-import com.example.project_cnpm.User.Customer;
-import com.example.project_cnpm.User.User;
+//import com.example.project_cnpm.SignUp.SignUpActivity;
+import com.example.project_cnpm.Model.Customer;
+
+import com.example.project_cnpm.View.ILoginView;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -52,20 +54,20 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements ILoginView {
     //    private LottieAnimationView lottieAnimationView;
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+
+    ILoginController loginController;
 
 
     //google api
@@ -76,7 +78,7 @@ public class LoginFragment extends Fragment {
     LinearLayout btnBack;
 
     // khai báo đăng nhập bầng username và password
-    private EditText username, password;
+    private EditText email, password;
     private Button btnLogin;
     private Switch btnSave;
     private TextView notify;
@@ -100,6 +102,7 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_login, container, false);
 
+      //  loginController = new LoginController(this,new LoginDAO());
 
         mapping(view);
 
@@ -109,7 +112,7 @@ public class LoginFragment extends Fragment {
         btnChangeSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SignUpActivity.class));
+             //   startActivity(new Intent(getActivity(), SignUpActivity.class));
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -150,10 +153,12 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    String user = username.getText().toString().trim();
+                    String mail = email.getText().toString().trim();
                     String pass = password.getText().toString().trim();
+                    Log.d("CCC",mail+"-----"+pass);
                     MD5 md5 = new MD5();
-                        getAccount(user,md5.enryptPassword(pass));
+                    login(mail,md5.enryptPassword(pass));
+                    //getAccount(mail,md5.enryptPassword(pass));
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
@@ -161,25 +166,23 @@ public class LoginFragment extends Fragment {
             }
         });
 
-
-
         return view;
     }
     public void mapping(View view){
-        username = view.findViewById(R.id.login_username);
-        password = view.findViewById(R.id.login_password);
+        email = view.findViewById(R.id.login_username_w);
+        password = view.findViewById(R.id.login_password_w);
         btnSave = view.findViewById(R.id.login_save_password);
-        btnLogin = view.findViewById(R.id.login_btn_login);
+        btnLogin = view.findViewById(R.id.login_btn_login_fg);
         notify = view.findViewById(R.id.notify_fail_login);
 
     }
     // xử lí sự kiện đăng nhập truyền thống
-    public void login(String username, String password){
+    public void login(String email, String password){
         String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
-        if (username == null || password == null || username == "" || password == ""){
-            notify.setText("*Vui lòng nhập thông tin!");
-        }
-        else{
+//        if (username == null || password == null || email == "" || password == ""){
+//            notify.setText("*Vui lòng nhập thông tin!");
+//        }
+//        else{
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
@@ -187,7 +190,8 @@ public class LoginFragment extends Fragment {
                         public void onResponse(String response) {
                             if (response.trim().equals("successful")){
                                 // get account of user
-                                getAccount(username,password);
+                                Log.d("CCC",response);
+                                getAccount(email,password);
                             }
                             else if(response.trim().equals("fail")){
                                 notify.setText("*Tài khoản không tồn tại!");
@@ -200,7 +204,7 @@ public class LoginFragment extends Fragment {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.d("EEE",error.toString());
+                            Log.d("CCC",error.toString());
                         }
                     }){
                 @Nullable
@@ -208,7 +212,7 @@ public class LoginFragment extends Fragment {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     HashMap<String,String> params = new HashMap<>();
-                        params.put("username",username);
+                        params.put("email",email);
                         params.put("password",password);
                     return params;
                 }
@@ -216,15 +220,15 @@ public class LoginFragment extends Fragment {
             requestQueue.add(stringRequest);
         }
 
-    }
+//    }
     // lấy account từ username, pass
-    public void getAccount(String username, String password){
+    public void getAccount(String email, String password){
         Customer account = new Customer();
         String url="http://appfooddb.000webhostapp.com/getAccount.php";
-        if(username == null || password == null){
-            return;
-        }
-        else{
+//        if(username == null || password == null){
+//            return;
+//        }
+//        else{
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
             StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, url,
@@ -235,7 +239,6 @@ public class LoginFragment extends Fragment {
                                JSONObject object = new JSONObject(response);
                                String idCustomer = object.getString("idCustomer");
                                String name = object.getString("fullName");
-                               String usernames = object.getString("username");
                                String passwords = object.getString("password");
                                int status = object.getInt("status");
                                String phone = object.getString("phone");
@@ -248,24 +251,27 @@ public class LoginFragment extends Fragment {
 
                                account.setIdCustomer(idCustomer);
                                account.setStatus(status);
-                               account.setEmail(email);
                                account.setPhone(phone);
                                account.setDateCreated(date);
                                account.setAddress(address);
                                account.setName(name);
                                account.setAvatar(imgCustomer);
-                               account.setUser(new User(usernames,passwords,status));
-                               MainActivity.account = account;
-                               if (MainActivity.account != null){
+                               account.setUser(new User(email,passwords,status));
+                          //     MainActivity.account = account;
 
-                                   Intent intent = new Intent(getContext(),MainActivity.class);
-                                   intent.putExtra("account",account);
+                               Log.d("CCC",account.toString());
+                               Log.d("CCC",response.length()+"");
 
-                                   startActivity(intent);
-                               }
-                               else{
-                                   Log.d("CCC", "account = null");
-                               }
+//                               if (MainActivity.account != null){
+//
+//                                   Intent intent = new Intent(getContext(),MainActivity.class);
+//                                   intent.putExtra("account",account);
+//
+//                                   startActivity(intent);
+//                               }
+//                               else{
+//                                   Log.d("CCC", "account = null");
+//                               }
 
                            } catch (JSONException e) {
                                e.printStackTrace();
@@ -283,14 +289,14 @@ public class LoginFragment extends Fragment {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     HashMap<String,String> params = new HashMap<>();
-                    params.put("username",username);
+                    params.put("email",email);
                     params.put("password",password);
                     return params;
                 }
             };
             requestQueue.add(jsonArrayRequest);
         }
-    }
+//    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode,data);
@@ -363,12 +369,12 @@ public class LoginFragment extends Fragment {
 
             Intent intent = new Intent(getActivity(),MainActivity.class);
             User user = new User();
-            user.setUsername(account.getId());
+            user.setEmail(account.getEmail());
             Customer customer = new Customer();
             customer.setUser(user);
             customer.setName(account.getDisplayName());
             customer.setAvatar(account.getPhotoUrl()+"");
-            customer.setEmail(account.getEmail()+"");
+         //   customer.setEmail(account.getEmail()+"");
 
             intent.putExtra("account",customer);
 
@@ -382,5 +388,17 @@ public class LoginFragment extends Fragment {
             Log.w("AAA", "signInResult:failed code=" + e.getStatusCode());
             // updateUI(null);
         }
+    }
+
+    @Override
+    public void showLoginSuccess(String message) {
+        notify.setTextColor(Color.GREEN);
+        notify.setText(message);
+    }
+
+    @Override
+    public void showLoginFail(String message) {
+        notify.setTextColor(Color.RED);
+        notify.setText(message);
     }
 }

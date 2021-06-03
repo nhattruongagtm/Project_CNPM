@@ -5,19 +5,36 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.project_cnpm.Controller.ILoginController;
+import com.example.project_cnpm.Controller.LoginController;
+import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.MainActivity;
+import com.example.project_cnpm.Model.Customer;
+import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.R;
+import com.example.project_cnpm.SharedReferences.DataLocalManager;
 import com.example.project_cnpm.SignUp.SignUpActivity;
 
+import com.example.project_cnpm.View.ILoginView;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -41,11 +58,17 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity {
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-//    private LottieAnimationView lottieAnimationView;
+public class LoginActivity extends AppCompatActivity implements ILoginView {
+
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+
+    ILoginController loginController;
 
 
     //google api
@@ -54,10 +77,21 @@ public class LoginActivity extends AppCompatActivity {
     private int RC_SIGN_IN = 0;
     TextView btnChangeSignUp;
     LinearLayout btnBack;
+
+    // khai báo đăng nhập bầng username và password
+    private EditText email, password;
+    private Button btnLogin;
+    private Switch btnSave;
+    private TextView notify;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        mapping();
+
+        loginController = new LoginController(this,new LoginDAO(this));
 
         btnChangeSignUp = findViewById(R.id.changeSignUp);
         btnBack = findViewById(R.id.btnBack_hompage);
@@ -101,7 +135,162 @@ public class LoginActivity extends AppCompatActivity {
         //google api
         loginGoogle();
 
+        // đăng nhập bằng username, password
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String mail = email.getText().toString().trim();
+                    String pass = password.getText().toString().trim();
+                    Log.d("CCC",mail+"-----"+pass);
+                    MD5 md5 = new MD5();
+                   // login(mail,md5.enryptPassword(pass));
+
+                    if(loginController.login(mail,md5.enryptPassword(pass))){
+                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    }
+                    Log.d("RRR","check: "+ loginController.login(mail,md5.enryptPassword(pass))+"");
+
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
     }
+    public void mapping(){
+        email = findViewById(R.id.login_username_w);
+        password = findViewById(R.id.login_password_w);
+        btnSave = findViewById(R.id.login_save_password);
+        btnLogin = findViewById(R.id.login_btn_login);
+        notify = findViewById(R.id.notify_fail_login);
+
+    }
+    // xử lí sự kiện đăng nhập truyền thống
+    public void login(String email, String password){
+        String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
+//        if (username == null || password == null || email == "" || password == ""){
+//            notify.setText("*Vui lòng nhập thông tin!");
+//        }
+//        else{
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("successful")){
+                            // get account of user
+                            Log.d("CCC",response);
+                            getAccount(email,password);
+                        }
+                        else if(response.trim().equals("fail")){
+                            notify.setText("*Tài khoản không tồn tại!");
+                        }
+                        else if(response.trim().equals("wrong password")){
+                            notify.setText("*Vui lòng nhập đúng password!");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("CCC",error.toString());
+                    }
+                }){
+            @Nullable
+            @org.jetbrains.annotations.Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("email",email);
+                params.put("password",password);
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    //    }
+    // lấy account từ username, pass
+    public void getAccount(String email, String password){
+        Customer account = new Customer();
+        String url="http://appfooddb.000webhostapp.com/getAccount.php";
+//        if(username == null || password == null){
+//            return;
+//        }
+//        else{
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            String idCustomer = object.getString("idCustomer");
+                            String name = object.getString("fullName");
+                            String passwords = object.getString("password");
+                            int status = object.getInt("status");
+                            String phone = object.getString("phone");
+                            String email = object.getString("email");
+                            String imgCustomer = object.getString("imgCustomer");
+                            String address = object.getString("address");
+                            String d = object.getString("dateCreated");
+                            String[] da = d.split("-");
+                            Date date = new Date(Integer.parseInt(da[2]),Integer.parseInt(da[1]),Integer.parseInt(da[0]));
+
+                            account.setIdCustomer(idCustomer);
+                            account.setStatus(status);
+                            account.setPhone(phone);
+                            account.setDateCreated(date);
+                            account.setAddress(address);
+                            account.setName(name);
+                            account.setAvatar(imgCustomer);
+                            account.setUser(new User(email,passwords,status));
+                      //      MainActivity.account = account;
+
+                            Log.d("CCC",account.toString());
+                            Log.d("CCC",response.length()+"");
+
+                            DataLocalManager.setAccount(account);
+
+
+                            if (DataLocalManager.getAccount() != null){
+
+                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+//                                intent.putExtra("account",account);
+
+                                startActivity(intent);
+                            }
+                            else{
+                                Log.d("CCC", "account = null");
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("CCC","error: "+error.toString());
+                    }
+                }){
+            @Nullable
+            @org.jetbrains.annotations.Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("email",email);
+                params.put("password",password);
+                return params;
+            }
+        };
+        requestQueue.add(jsonArrayRequest);
+    }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -173,9 +362,23 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
+            Intent intent = new Intent(this,MainActivity.class);
+            User user = new User();
+            user.setEmail(account.getEmail());
+            Customer customer = new Customer();
+            customer.setUser(user);
+            customer.setName(account.getDisplayName());
+            customer.setAvatar(account.getPhotoUrl()+"");
+            //   customer.setEmail(account.getEmail()+"");
+
+            DataLocalManager.setAccount(customer);
+
+          //  intent.putExtra("account",customer);
+
+
             // Signed in successfully, show authenticated UI.
             //updateUI(account);
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(intent);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -185,5 +388,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void showLoginSuccess(String message) {
+        notify.setTextColor(Color.GREEN);
+        notify.setText(message);
+    }
 
+    @Override
+    public void showLoginFail(String message) {
+        notify.setTextColor(Color.RED);
+        notify.setText(message);
+    }
 }
