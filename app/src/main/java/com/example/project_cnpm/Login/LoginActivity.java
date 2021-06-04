@@ -114,10 +114,26 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         callbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);
 
-        loginButton.setPublishPermissions("email");
+        loginButton.setPermissions("email");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                Customer account = new Customer();
+                String id = loginResult.getAccessToken().getUserId();
+                String imgCustomer = "https://graph.facebook.com/"+loginResult.getAccessToken().getUserId()+"/picture?return_ssl_resources=1";
+                account.setIdCustomer(id);
+                User user = new User();
+                user.setEmail(id);
+                user.setPassword("");
+                user.setStatus(1);
+                account.setUser(user);
+                account.setAvatar(imgCustomer);
+                DataLocalManager.setAccount(account);
+
+                if (DataLocalManager.getAccount()!= null){
+                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                }
+
                 Log.d("AAA","Login successful!");
             }
 
@@ -167,153 +183,30 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         notify = findViewById(R.id.notify_fail_login);
 
     }
-    // xử lí sự kiện đăng nhập truyền thống
-    public void login(String email, String password){
-        String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
-//        if (username == null || password == null || email == "" || password == ""){
-//            notify.setText("*Vui lòng nhập thông tin!");
-//        }
-//        else{
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response.trim().equals("successful")){
-                            // get account of user
-                            Log.d("CCC",response);
-                            getAccount(email,password);
-                        }
-                        else if(response.trim().equals("fail")){
-                            notify.setText("*Tài khoản không tồn tại!");
-                        }
-                        else if(response.trim().equals("wrong password")){
-                            notify.setText("*Vui lòng nhập đúng password!");
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("CCC",error.toString());
-                    }
-                }){
-            @Nullable
-            @org.jetbrains.annotations.Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> params = new HashMap<>();
-                params.put("email",email);
-                params.put("password",password);
-                return params;
-            }
-        };
-        requestQueue.add(stringRequest);
-    }
 
-    //    }
-    // lấy account từ username, pass
-    public void getAccount(String email, String password){
-        Customer account = new Customer();
-        String url="http://appfooddb.000webhostapp.com/getAccount.php";
-//        if(username == null || password == null){
-//            return;
-//        }
-//        else{
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject object = new JSONObject(response);
-                            String idCustomer = object.getString("idCustomer");
-                            String name = object.getString("fullName");
-                            String passwords = object.getString("password");
-                            int status = object.getInt("status");
-                            String phone = object.getString("phone");
-                            String email = object.getString("email");
-                            String imgCustomer = object.getString("imgCustomer");
-                            String address = object.getString("address");
-                            String d = object.getString("dateCreated");
-                            String[] da = d.split("-");
-                            Date date = new Date(Integer.parseInt(da[2]),Integer.parseInt(da[1]),Integer.parseInt(da[0]));
-
-                            account.setIdCustomer(idCustomer);
-                            account.setStatus(status);
-                            account.setPhone(phone);
-                            account.setDateCreated(date);
-                            account.setAddress(address);
-                            account.setName(name);
-                            account.setAvatar(imgCustomer);
-                            account.setUser(new User(email,passwords,status));
-                      //      MainActivity.account = account;
-
-                            Log.d("CCC",account.toString());
-                            Log.d("CCC",response.length()+"");
-
-                            DataLocalManager.setAccount(account);
-
-
-                            if (DataLocalManager.getAccount() != null){
-
-                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-//                                intent.putExtra("account",account);
-
-                                startActivity(intent);
-                            }
-                            else{
-                                Log.d("CCC", "account = null");
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("CCC","error: "+error.toString());
-                    }
-                }){
-            @Nullable
-            @org.jetbrains.annotations.Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> params = new HashMap<>();
-                params.put("email",email);
-                params.put("password",password);
-                return params;
-            }
-        };
-        requestQueue.add(jsonArrayRequest);
-    }
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode,data);
         super.onActivityResult(requestCode, resultCode, data);
         // facebook
-        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-                Log.d("AAA",object.toString());
-                try {
-                    String name = object.getString("name");
-
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
-        Bundle bundle= new Bundle();
-        bundle.putString("fields","gender, name, id, firsy_name, last_name");
-        graphRequest.setParameters(bundle);
-        graphRequest.executeAsync();
+//        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+//            @Override
+//            public void onCompleted(JSONObject object, GraphResponse response) {
+//                Log.d("AAA",object.toString());
+//                try {
+//                    String name = object.getString("name");
+//
+//                }
+//                catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        Bundle bundle= new Bundle();
+//        bundle.putString("fields","gender, name, id, first_name, last_name");
+//        graphRequest.setParameters(bundle);
+//        graphRequest.executeAsync();
 
         // google
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
@@ -369,21 +262,14 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             customer.setUser(user);
             customer.setName(account.getDisplayName());
             customer.setAvatar(account.getPhotoUrl()+"");
-            //   customer.setEmail(account.getEmail()+"");
 
             DataLocalManager.setAccount(customer);
 
-          //  intent.putExtra("account",customer);
-
-
-            // Signed in successfully, show authenticated UI.
-            //updateUI(account);
             startActivity(intent);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("AAA", "signInResult:failed code=" + e.getStatusCode());
-           // updateUI(null);
         }
     }
 

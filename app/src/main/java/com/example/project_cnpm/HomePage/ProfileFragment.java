@@ -48,8 +48,9 @@ public class ProfileFragment extends Fragment {
 
         Customer account = DataLocalManager.getAccount();
         if(account != null) {
-            email.setText(account.getUser().getEmail());
             Log.d("EEE","email: "+account.toString()+"");
+                email.setText(account.getUser().getEmail());
+
             Glide.with(getContext()).load(account.getAvatar()).into(img);
         }
 

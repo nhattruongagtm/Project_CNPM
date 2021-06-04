@@ -1,8 +1,8 @@
 package com.example.project_cnpm.Login;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
@@ -21,7 +21,6 @@ import com.example.project_cnpm.SharedReferences.DataLocalManager;
 //import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.database.ValueEventListener;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,66 +32,86 @@ public class LoginDAO {
     private LoginActivity context;
     private boolean check;
 
-
     public LoginDAO(LoginActivity context) {
         this.context = context;
     }
-    public static class CheckLoginDAO{
 
-    }
-    public boolean checkLogin(String email, String password) {
-        String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response.trim().equals("successful")) {
-
-                            Log.d("CCC", response);
-                            getAccount(email, password);
-
-                            check = true;
-                            DataLocalManager.setValid(true);
-
-                            Log.d("RRR", "check1: "+ check);
-
-                        } else if (response.trim().equals("fail")) {
-
-                            check = false;
-
-                        } else if (response.trim().equals("wrong password")) {
-
-                            check = false;
-
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("CCC", error.toString());
-                    }
-                }) {
-            @Nullable
-            @org.jetbrains.annotations.Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("password", password);
-                return params;
-            }
-
-            @Override
-            public Priority getPriority() {
-                return Priority.HIGH;
-            }
-        };
-        requestQueue.add(stringRequest).setSequence(1);
-        Log.d("RRR", "check2: "+ check);
+    public boolean checkLogin(String email, String password){
+        LoginDAOAsyntask asyntask = new LoginDAOAsyntask(email,password);
+        asyntask.execute();
         return check;
     }
+    private class LoginDAOAsyntask extends AsyncTask<Void, Void, Boolean> {
+
+        private String email;
+        private String password;
+
+        public LoginDAOAsyntask(String email, String password) {
+            this.email = email;
+            this.password = password;
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (response.trim().equals("successful")) {
+
+                                getAccount(email, password);
+
+                                check = true;
+
+                                Log.d("RRR", "check1: " + check);
+
+                            } else if (response.trim().equals("fail")) {
+
+                                check = false;
+
+                            } else if (response.trim().equals("wrong password")) {
+
+                                check = false;
+
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("CCC", error.toString());
+                        }
+                    }) {
+                @Nullable
+                @org.jetbrains.annotations.Nullable
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("email", email);
+                    params.put("password", password);
+                    return params;
+                }
+            };
+            requestQueue.add(stringRequest);
+            Log.d("RRR", "check2: " + check);
+
+
+
+
+
+            return check;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            check = aBoolean;
+        }
+    }
+
     public void getAccount(String email, String password) {
         Customer account = new Customer();
         String url = "http://appfooddb.000webhostapp.com/getAccount.php";

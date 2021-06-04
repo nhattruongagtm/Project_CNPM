@@ -13,10 +13,12 @@
     <com.etebarian.meowbottomnavigation.MeowBottomNavigation
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
         android:id="@+id/navigation_bottom"
         app:mbn_circleColor="@color/white"
         app:mbn_selectedIconColor="#2196F3"
         app:mbn_countTextColor="@color/white"
+        app:mbn_rippleColor="#FFEB3B"
         app:mbn_countBackgroundColor="#f34"
         app:mbn_defaultIconColor="@color/white"
         app:mbn_backgroundBottomColor="#FF9800"/>

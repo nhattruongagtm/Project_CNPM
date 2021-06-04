@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerToday;
     RecyclerView recyclerRecommended;
     GoogleSignInClient mGoogleSignInClient;
-    ImageView imgCustomer;
+//    ImageView imgCustomer;
 
 
 
@@ -54,69 +54,69 @@ public class HomeFragment extends Fragment {
 
          recyclerRecommended = view.findViewById(R.id.home_page_dishRecommended);
 
-        imgCustomer = view.findViewById(R.id.imgCustomer);
+//        imgCustomer = view.findViewById(R.id.imgCustomer);
 
         // khởi tạo recyler view today
         createDishesToday();
         // khởi tạo recyler view recommend
         createDishesRecommended();
 
-
-        googleAPI();
-        loadCustomer(view);
+//
+//        googleAPI();
+//        loadCustomer(view);
 
         // load img
-        Customer account = DataLocalManager.getAccount();
-        if(account != null){
-            Glide.with(this).load(String.valueOf(account.getAvatar())).into(imgCustomer);
-        }
+//        Customer account = DataLocalManager.getAccount();
+//        if(account != null){
+//            Glide.with(this).load(String.valueOf(account.getAvatar())).into(imgCustomer);
+//        }
 
 
 
-        // sign out
-        imgCustomer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataLocalManager.setValid(false);
-                signOut();
-            }
-        });
+//        // sign out
+//        imgCustomer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DataLocalManager.setValid(false);
+//                signOut();
+//            }
+//        });
 
         return view;
 
 
     }
-    public void signOut(){
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        //
-                      //  MainActivity.account = null;
-                        DataLocalManager.setAccount(null);
-                        //getActivity().finish();
-                    }
-                });
-    }
-    //login google
-    public void googleAPI(){
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
-    }
-    public void loadCustomer(View view){
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
-            String personId = acct.getId();
-            Uri personPhoto = acct.getPhotoUrl();
-            Log.d("EEE",personEmail+"");
-
-            Glide.with(this).load(String.valueOf(personPhoto)).into(imgCustomer);
-        }
-    }
+//    public void signOut(){
+//        mGoogleSignInClient.signOut()
+//                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        //
+//                      //  MainActivity.account = null;
+//                        DataLocalManager.setAccount(null);
+//                        //getActivity().finish();
+//                    }
+//                });
+//    }
+//    //login google
+//    public void googleAPI(){
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+//        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+//    }
+//    public void loadCustomer(View view){
+//        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+//        if (acct != null) {
+//            String personName = acct.getDisplayName();
+//            String personGivenName = acct.getGivenName();
+//            String personFamilyName = acct.getFamilyName();
+//            String personEmail = acct.getEmail();
+//            String personId = acct.getId();
+//            Uri personPhoto = acct.getPhotoUrl();
+//            Log.d("EEE",personEmail+"");
+//
+//            Glide.with(this).load(String.valueOf(personPhoto)).into(imgCustomer);
+//        }
+//    }
     public void createDishesToday(){
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
