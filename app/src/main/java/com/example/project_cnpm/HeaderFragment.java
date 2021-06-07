@@ -1,5 +1,6 @@
 package com.example.project_cnpm;
 
+import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -7,9 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +31,8 @@ public class HeaderFragment extends Fragment {
 
     ImageView imgCustomer;
     GoogleSignInClient mGoogleSignInClient;
+
+    ImageView btnMenu;
 
 
     public HeaderFragment() {
@@ -46,6 +52,7 @@ public class HeaderFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_header, container, false);
 
         imgCustomer = view.findViewById(R.id.imgCustomer);
+        btnMenu = view.findViewById(R.id.home_page_menu);
 
         Customer account = DataLocalManager.getAccount();
         if(account != null){
@@ -65,8 +72,29 @@ public class HeaderFragment extends Fragment {
         googleAPI();
         loadCustomer(view);
 
+        // handler btn menu
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(getContext());
+                dialog.setContentView(R.layout.dialog_menu);
+
+                setPosition(dialog,150);
+
+                dialog.show();
+            }
+        });
+
 
         return view;
+    }
+    public void setPosition(Dialog dialog,int yValue) {
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams param = window.getAttributes();
+        param.gravity = Gravity.TOP | Gravity.LEFT;
+        param.y = yValue;
+        window.setAttributes(param);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
     public void signOut(){
         mGoogleSignInClient.signOut()
