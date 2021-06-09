@@ -5,10 +5,14 @@ import android.content.Context;
 import com.example.project_cnpm.Model.Customer;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+
 public class DataLocalManager {
     private static final String REF_FIRST = "REF_FIRST";
     private static final String REF_VALID = "REF_VALID";
     private static final String REF_ACCOUNT = "REF_ACCOUNT";
+    private static final String EMAIL_LOGIN = "EMAIL_LOGIN";
+    private static final String PASSWORD_LOGIN = "PASSWORD_LOGIN";
     private static DataLocalManager instance;
     private MyShareReferences myShareReferences;
 
@@ -44,6 +48,19 @@ public class DataLocalManager {
     }
     public static boolean isValid(){
         return DataLocalManager.getInstance().myShareReferences.getBooleanValue(REF_VALID);
+    }
+    public static void setSaveAccount(String email, String password){
+        DataLocalManager.getInstance().myShareReferences.putStringValue(EMAIL_LOGIN, email);
+        DataLocalManager.getInstance().myShareReferences.putStringValue(PASSWORD_LOGIN,password);
+    }
+    public static HashMap<String,String> getLoginInput(){
+        String email = DataLocalManager.getInstance().myShareReferences.getStringValue(EMAIL_LOGIN);
+        String password = DataLocalManager.getInstance().myShareReferences.getStringValue(PASSWORD_LOGIN);
+
+        HashMap<String,String> user = new HashMap<>();
+        user.put(email,password);
+
+        return user;
     }
 
 }

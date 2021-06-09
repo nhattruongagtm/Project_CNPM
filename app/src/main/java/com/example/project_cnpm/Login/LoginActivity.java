@@ -11,6 +11,8 @@ import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -67,6 +69,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+   // private AccessTokenTracker accessTokenTracker;
 
     ILoginController loginController;
 
@@ -81,8 +84,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     // khai báo đăng nhập bầng username và password
     private EditText email, password;
     private Button btnLogin;
-    private Switch btnSave;
+    private CheckBox btnSave;
     private TextView notify;
+    private boolean saveInput;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,12 +107,39 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         });
+        if (DataLocalManager.getLoginInput() != null){
+
+        }
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         });
+        btnSave.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                saveInput = isChecked;
+            }
+        });
+        if(DataLocalManager.getLoginInput() != null) {
+            String m = "", p = "";
+            for (Map.Entry<String, String> map : DataLocalManager.getLoginInput().entrySet()) {
+                m = map.getKey();
+                p = map.getValue();
+
+                if (!map.getKey().equals("") || !map.getKey().equals("")) {
+                    btnSave.setChecked(true);
+                }
+                else{
+                    btnSave.setChecked(false);
+                }
+                Log.d("AAA", m+"  ----  "+p);
+            }
+            email.setText(m + "");
+            password.setText(p + "");
+
+        }
 
 
         // facebook api
@@ -115,19 +147,108 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         loginButton = findViewById(R.id.login_button);
 
         loginButton.setPermissions("email");
+//        loginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+//                    @Override
+//                    public void onCompleted(JSONObject object, GraphResponse response) {
+//                        Log.d("AAA",object.toString());
+//                        try {
+//                            Customer account = new Customer();
+//                            User user = new User();
+//                            GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+//                                @Override
+//                                public void onCompleted(JSONObject object, GraphResponse response) {
+//                                    Log.d("AAA",object.toString());
+//                                    try {
+//                                        String name = object.getString("name");
+//                                        String id = object.getString("id");
+//                                        String avatar = "https://graph.facebook.com/"+id+"/picture?type=large";
+//                                        account.setName(name);
+//                                        account.setIdCustomer(id);
+//                                        account.setAvatar(avatar);
+//
+//                                        user.setEmail(id);
+//                                        account.setUser(user);
+//                                        Log.d("AAA", user.toString());
+//
+//                                        DataLocalManager.setAccount(account);
+//
+//                                        if (DataLocalManager.getAccount()!= null){
+//                                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//                                        }
+//
+//                                        Log.d("AAA","Login successful!");
+//                                        Log.d("AAA",account.getName());
+//
+////                                        accessTokenTracker = new AccessTokenTracker() {
+////                                            @Override
+////                                            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+////                                                if(currentAccessToken == null){
+////                                                    LoginManager.getInstance().logOut();
+////                                                }
+////                                            }
+////                                        };
+//
+//                                    }
+//                                    catch (Exception e){
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                            });
+//                            Bundle bundle= new Bundle();
+//                            bundle.putString("fields","gender, name, id, first_name, last_name");
+//                            graphRequest.setParameters(bundle);
+//                            graphRequest.executeAsync();
+//
+//                        }
+//                        catch (Exception e){
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//                Bundle bundle= new Bundle();
+//                bundle.putString("fields","gender, name, id, first_name, last_name");
+//                graphRequest.setParameters(bundle);
+//                graphRequest.executeAsync();
+//            }
+//        });
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Customer account = new Customer();
                 String id = loginResult.getAccessToken().getUserId();
-                String imgCustomer = "https://graph.facebook.com/"+loginResult.getAccessToken().getUserId()+"/picture?return_ssl_resources=1";
+
+                GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.d("AAA",object.toString());
+                        try {
+                            String name = object.getString("name");
+                            account.setName(name);
+                            String id = object.getString("id");
+                            String avatar = "https://graph.facebook.com/"+id+"/picture?type=large";
+                            account.setIdCustomer(id);
+                            account.setAvatar(avatar);
+
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                Bundle bundle= new Bundle();
+                bundle.putString("fields","gender, name, id, first_name, last_name");
+                graphRequest.setParameters(bundle);
+                graphRequest.executeAsync();
+
                 account.setIdCustomer(id);
                 User user = new User();
                 user.setEmail(id);
                 user.setPassword("");
                 user.setStatus(1);
                 account.setUser(user);
-                account.setAvatar(imgCustomer);
                 DataLocalManager.setAccount(account);
 
                 if (DataLocalManager.getAccount()!= null){
@@ -135,6 +256,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 }
 
                 Log.d("AAA","Login successful!");
+              //  Log.d("AAA",account.getName());
             }
 
             @Override
@@ -163,6 +285,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                    // login(mail,md5.enryptPassword(pass));
 
                     if(loginController.login(mail,md5.enryptPassword(pass))){
+                         if (saveInput){
+                                DataLocalManager.setSaveAccount(email.getText().toString(),password.getText().toString());
+                         }
+                        else{
+                            DataLocalManager.setSaveAccount(null,null);
+                        }
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                     }
                     Log.d("RRR","check: "+ loginController.login(mail,md5.enryptPassword(pass))+"");
@@ -181,6 +309,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         btnSave = findViewById(R.id.login_save_password);
         btnLogin = findViewById(R.id.login_btn_login);
         notify = findViewById(R.id.notify_fail_login);
+        btnSave = findViewById(R.id.checkbox_save_input);
 
     }
 
@@ -189,13 +318,14 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode,data);
         super.onActivityResult(requestCode, resultCode, data);
-        // facebook
+         //facebook
 //        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
 //            @Override
 //            public void onCompleted(JSONObject object, GraphResponse response) {
 //                Log.d("AAA",object.toString());
 //                try {
 //                    String name = object.getString("name");
+//                    Log.d("XXX",name);
 //
 //                }
 //                catch (Exception e){
@@ -207,6 +337,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 //        bundle.putString("fields","gender, name, id, first_name, last_name");
 //        graphRequest.setParameters(bundle);
 //        graphRequest.executeAsync();
+
+
 
         // google
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
@@ -225,7 +357,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             }
         }
     };
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

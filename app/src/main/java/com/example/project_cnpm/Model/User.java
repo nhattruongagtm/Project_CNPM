@@ -68,4 +68,13 @@ public class User implements Serializable, IUser {
             return -1;
         }
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

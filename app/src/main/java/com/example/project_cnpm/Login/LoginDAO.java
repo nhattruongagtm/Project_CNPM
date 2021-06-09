@@ -100,8 +100,6 @@ public class LoginDAO {
 
 
 
-
-
             return check;
         }
 

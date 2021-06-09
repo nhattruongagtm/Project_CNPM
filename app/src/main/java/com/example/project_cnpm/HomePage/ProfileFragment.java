@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.R;
 import com.example.project_cnpm.Model.Customer;
@@ -27,7 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class ProfileFragment extends Fragment {
-    private TextView email;
+    private TextView name, id;
     private ImageView img;
     private TextView btnSignout;
 
@@ -47,9 +48,10 @@ public class ProfileFragment extends Fragment {
     }
 
     public void mapping(View v){
-        email = v.findViewById(R.id.emailCustomer);
+        name = v.findViewById(R.id.emailCustomer);
         img = v.findViewById(R.id.imgCustomer);
         btnSignout = v.findViewById(R.id.logout);
+        id = v.findViewById(R.id.email1Customer);
     }
     public void createDialogSignOut(){
         Dialog dialog = new Dialog(getContext());
@@ -88,7 +90,8 @@ public class ProfileFragment extends Fragment {
         Customer account = DataLocalManager.getAccount();
         if(account != null) {
             Log.d("EEE","email: "+account.toString()+"");
-                email.setText(account.getUser().getEmail());
+                name.setText(account.getName());
+                id.setText(account.getUser().getEmail());
 
             Glide.with(getContext()).load(account.getAvatar()).into(img);
         }
@@ -118,7 +121,7 @@ public class ProfileFragment extends Fragment {
                     }
                 });
         DataLocalManager.setAccount(null);
-        startActivity(new Intent(getActivity(),MainActivity.class));
+        startActivity(new Intent(getActivity(), LoginActivity.class));
     }
     //login google
     public void googleAPI(){
