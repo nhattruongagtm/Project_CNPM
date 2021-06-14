@@ -8,7 +8,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.project_cnpm.HomePage.HomeFragment;
 import com.example.project_cnpm.HomePage.NotificationFragment;
@@ -22,6 +30,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     //kiểm tra kết nối internet
@@ -32,16 +46,6 @@ public class MainActivity extends AppCompatActivity {
     // google api
     GoogleSignInClient mGoogleSignInClient;
 
-  //  public static Customer account;
-
-    public Customer getAccount() {
-        Intent intent = getIntent();
-        return (Customer)intent.getSerializableExtra("account");
-    }
-//
-//    public void setAccount(Customer account) {
-//        this.account = account;
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
         // load customer sau khi đăng nhập
         googleAPI();
-
-        // check Session
-
 
     }
 
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     case 1: fragment = new HomeFragment();
                     break;
                     case 3: fragment = new UserFragment();
+
                     break;
                 }
                 if (fragment != null) {
@@ -152,4 +154,5 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(networkChangeListener);
         super.onStop();
     }
+
 }

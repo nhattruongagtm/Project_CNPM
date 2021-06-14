@@ -1,7 +1,11 @@
 package com.example.project_cnpm.Login;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -10,20 +14,28 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.Model.User;
+import com.example.project_cnpm.R;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
+import com.example.project_cnpm.SharedReferences.MyApplication;
+import com.google.gson.JsonArray;
 //import com.google.firebase.database.DataSnapshot;
 //import com.google.firebase.database.DatabaseError;
 //import com.google.firebase.database.DatabaseReference;
 //import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,17 +43,77 @@ import java.util.Map;
 public class LoginDAO {
     private LoginActivity context;
     private boolean check;
+    String result = "";
+    private Handler handler;
+
+
 
     public LoginDAO(LoginActivity context) {
         this.context = context;
     }
 
-    public boolean checkLogin(String email, String password){
-        LoginDAOAsyntask asyntask = new LoginDAOAsyntask(email,password);
-        asyntask.execute();
-        return check;
+    public void checkLogin(String email, String password){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("successful")) {
+
+                            getAccount(email, password);
+
+                            check = true;
+                            result = response;
+                            DataLocalManager.setResultLogin("successful");
+
+
+                            Message message = new Message();
+
+                            message.what = 1;
+                            message.arg1 = 0;
+                            handler.sendMessage(message);
+
+                            Log.d("RRR", "check1: " + check);
+
+                        } else if (response.trim().equals("fail")) {
+
+                            Message message = new Message();
+
+                            message.what = 1;
+                            message.arg1 = 1;
+                            handler.sendMessage(message);
+
+                            check = false;
+                            result = response;
+                            DataLocalManager.setResultLogin("fail");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("CCC", error.toString());
+                        Message message = new Message();
+
+                        message.what = 1;
+                        message.arg1 = 2;
+                        handler.sendMessage(message);
+                    }
+                }) {
+            @Nullable
+            @org.jetbrains.annotations.Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
-    private class LoginDAOAsyntask extends AsyncTask<Void, Void, Boolean> {
+    private class LoginDAOAsyntask extends AsyncTask<Void, Void, Void> {
 
         private String email;
         private String password;
@@ -51,11 +123,16 @@ public class LoginDAO {
             this.password = password;
         }
 
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+        }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
-            String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
+        protected Void doInBackground(Void... Voids) {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
+            String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -65,17 +142,16 @@ public class LoginDAO {
                                 getAccount(email, password);
 
                                 check = true;
+                                result = response;
+                                DataLocalManager.setResultLogin("successful");
 
                                 Log.d("RRR", "check1: " + check);
 
                             } else if (response.trim().equals("fail")) {
 
                                 check = false;
-
-                            } else if (response.trim().equals("wrong password")) {
-
-                                check = false;
-
+                                result = response;
+                                DataLocalManager.setResultLogin("fail");
                             }
                         }
                     },
@@ -96,17 +172,13 @@ public class LoginDAO {
                 }
             };
             requestQueue.add(stringRequest);
-            Log.d("RRR", "check2: " + check);
-
-
-
-            return check;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-            check = aBoolean;
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+            result = DataLocalManager.getResultLogin();
         }
     }
 
@@ -174,35 +246,42 @@ public class LoginDAO {
             requestQueue.add(jsonArrayRequest);
         }
     }
-//    public static class Validate {
-//        static String rs = "";
-//        public Validate(){
-//
-//        }
-//        public static String getValidateValue(String key) {
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            DatabaseReference myRef = database.getReference(key);
-//
-//            myRef.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//                    rs = snapshot.getValue(String.class);
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//
-//                }
-//            });
-//            return rs;
-//        }
-//        public static void setValidateValue(String key, String value){
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            DatabaseReference myRef = database.getReference(key);
-//
-//            myRef.setValue(value);
-//        }
-//    }
+    public HashMap<String,String> getAllAccount(){
+        HashMap<String,String> users = new HashMap<>();
+        String url = "https://appfooddb.000webhostapp.com/getAllAccount.php";
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            JSONObject object = new JSONObject();
+                            try {
+                                users.put(object.getString("email"),object.getString("password"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(stringRequest);
 
+        Log.d("SSS",users.toString());
 
+        return users;
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
 }

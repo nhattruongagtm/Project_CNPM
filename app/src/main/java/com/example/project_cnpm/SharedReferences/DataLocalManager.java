@@ -13,6 +13,7 @@ public class DataLocalManager {
     private static final String REF_ACCOUNT = "REF_ACCOUNT";
     private static final String EMAIL_LOGIN = "EMAIL_LOGIN";
     private static final String PASSWORD_LOGIN = "PASSWORD_LOGIN";
+    private static final String RESULT_LOGIN = "RESULT_LOGIN";
     private static DataLocalManager instance;
     private MyShareReferences myShareReferences;
 
@@ -61,6 +62,12 @@ public class DataLocalManager {
         user.put(email,password);
 
         return user;
+    }
+    public static void setResultLogin(String result){
+        DataLocalManager.getInstance().myShareReferences.putStringValue(RESULT_LOGIN,result);
+    }
+    public static String getResultLogin(){
+        return DataLocalManager.getInstance().myShareReferences.getStringValue(RESULT_LOGIN);
     }
 
 }

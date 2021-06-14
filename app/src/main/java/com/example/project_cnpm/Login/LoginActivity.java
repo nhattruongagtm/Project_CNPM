@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.AuthFailureError;
@@ -24,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Controller.ILoginController;
@@ -57,6 +59,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -107,9 +110,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         });
-        if (DataLocalManager.getLoginInput() != null){
-
-        }
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 saveInput = isChecked;
             }
         });
+
         if(DataLocalManager.getLoginInput() != null) {
             String m = "", p = "";
             for (Map.Entry<String, String> map : DataLocalManager.getLoginInput().entrySet()) {
@@ -218,7 +219,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Customer account = new Customer();
-                String id = loginResult.getAccessToken().getUserId();
+                User user = new User();
 
                 GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -226,11 +227,52 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                         Log.d("AAA",object.toString());
                         try {
                             String name = object.getString("name");
-                            account.setName(name);
                             String id = object.getString("id");
                             String avatar = "https://graph.facebook.com/"+id+"/picture?type=large";
+                            account.setName(name);
                             account.setIdCustomer(id);
                             account.setAvatar(avatar);
+
+                            user.setEmail(id);
+                            account.setUser(user);
+
+                            DataLocalManager.setAccount(account);
+
+                            //create Account
+                            String url = "https://appfooddb.000webhostapp.com/checkAccountAPIUser.php";
+                            RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            if(response.trim().equals("false")){
+                                                createAccount(id,name,avatar);
+                                            }
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }){
+                                @Nullable
+                                @org.jetbrains.annotations.Nullable
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    HashMap<String,String> params = new HashMap<>();
+                                    params.put("idCustomer",account.getIdCustomer());
+                                    return params;
+                                }
+                            };
+                            requestQueue.add(stringRequest);
+
+
+
+                            if (DataLocalManager.getAccount()!= null){
+                                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                            }
+                            Log.d("AAA", user.toString());
 
                         }
                         catch (Exception e){
@@ -243,17 +285,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 graphRequest.setParameters(bundle);
                 graphRequest.executeAsync();
 
-                account.setIdCustomer(id);
-                User user = new User();
-                user.setEmail(id);
-                user.setPassword("");
-                user.setStatus(1);
-                account.setUser(user);
-                DataLocalManager.setAccount(account);
-
-                if (DataLocalManager.getAccount()!= null){
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                }
+//                if (DataLocalManager.getAccount()!= null){
+//                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//                }
 
                 Log.d("AAA","Login successful!");
               //  Log.d("AAA",account.getName());
@@ -283,17 +317,23 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                     Log.d("CCC",mail+"-----"+pass);
                     MD5 md5 = new MD5();
                    // login(mail,md5.enryptPassword(pass));
+                    loginController.login(mail,md5.enryptPassword(pass));
 
-                    if(loginController.login(mail,md5.enryptPassword(pass))){
-                         if (saveInput){
-                                DataLocalManager.setSaveAccount(email.getText().toString(),password.getText().toString());
-                         }
-                        else{
-                            DataLocalManager.setSaveAccount(null,null);
-                        }
+//                    if(loginController.login(mail,md5.enryptPassword(pass))){
+//                         if (saveInput){
+//                                DataLocalManager.setSaveAccount(email.getText().toString(),password.getText().toString());
+//                         }
+//                        else{
+//                            DataLocalManager.setSaveAccount(null,null);
+//                        }
+//                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//                    }
+
+//                    Log.d("RRR","check: "+ loginController.login(mail,md5.enryptPassword(pass))+"");
+
+                    if(DataLocalManager.getAccount()!=null){
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                     }
-                    Log.d("RRR","check: "+ loginController.login(mail,md5.enryptPassword(pass))+"");
 
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
@@ -382,6 +422,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -391,10 +432,45 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             user.setEmail(account.getEmail());
             Customer customer = new Customer();
             customer.setUser(user);
+            Log.d("ZZZ", account.getId());
+            customer.setIdCustomer(account.getId());
             customer.setName(account.getDisplayName());
             customer.setAvatar(account.getPhotoUrl()+"");
 
             DataLocalManager.setAccount(customer);
+
+
+            //createAccount
+            String url = "https://appfooddb.000webhostapp.com/checkAccountAPIUser.php";
+            RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if(response.trim().equals("false")){
+                                Log.d("ZZZ",response);
+                                Log.d("ZZZ",account.getId()+" "+account.getDisplayName()+" "+account.getPhotoUrl()+"");
+                                createAccount(account.getId(),account.getDisplayName(),account.getPhotoUrl()+"");
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }){
+                @Nullable
+                @org.jetbrains.annotations.Nullable
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    HashMap<String,String> params = new HashMap<>();
+                    params.put("idCustomer",account.getId());
+                    return params;
+                }
+            };
+            requestQueue.add(stringRequest);
+
 
             startActivity(intent);
         } catch (ApiException e) {
@@ -402,6 +478,56 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("AAA", "signInResult:failed code=" + e.getStatusCode());
         }
+    }
+    public void createAccount(String idCustomer, String name, String img){
+        String url = "https://appfooddb.000webhostapp.com/createAccountForAPIUser.php";
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("ZZZ",idCustomer+" "+name+" "+img);
+                        Log.d("ZZZ", "getAccount "+ response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+            @Nullable
+            @org.jetbrains.annotations.Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("idCustomer",idCustomer);
+                params.put("nameCustomer",name);
+                params.put("imgCustomer",img);
+
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+    public void checkIdCustomer(String id){
+        String url = "";
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                            if(response.trim().equals("false")){
+                            }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        requestQueue.add(stringRequest);
     }
 
 
