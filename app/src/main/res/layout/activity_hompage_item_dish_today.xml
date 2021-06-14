@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content">
                 <CheckBox
                     android:id="@+id/homepage_checkbox_today"
-                    android:background="@color/transparency"
+                    android:background="@null"
                     android:button="@drawable/custom_checkbox_homepage"
                     android:layout_width="25dp"
                     android:layout_height="25dp"/>

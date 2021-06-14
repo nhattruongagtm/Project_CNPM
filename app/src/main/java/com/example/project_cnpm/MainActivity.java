@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.example.project_cnpm.DishesPage.DishesFragment;
 import com.example.project_cnpm.HomePage.HomeFragment;
 import com.example.project_cnpm.HomePage.NotificationFragment;
 import com.example.project_cnpm.HomePage.UserFragment;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void addMenuItem(){
         bottomNavigation.add(new MeowBottomNavigation.Model(1,R.drawable.ic_baseline_home_24));
-        bottomNavigation.add(new MeowBottomNavigation.Model(2,R.drawable.ic_baseline_notifications_24));
+        bottomNavigation.add(new MeowBottomNavigation.Model(2,R.drawable.ic_baseline_set_meal_24));
         bottomNavigation.add(new MeowBottomNavigation.Model(3,R.drawable.ic_baseline_account_circle_24));
 
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = null;
 
                 switch (item.getId()){
-                    case 2: fragment = new NotificationFragment();
+                    case 2: fragment = new DishesFragment();
                     break;
                     case 1: fragment = new HomeFragment();
                     break;
@@ -100,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // set notification count
-        bottomNavigation.setCount(2,"10");
+//        // set notification count
+//        bottomNavigation.setCount(2,"10");
         //set home fragment initially selected
         bottomNavigation.show(1,true);
         bottomNavigation.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {

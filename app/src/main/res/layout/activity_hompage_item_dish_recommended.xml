@@ -86,7 +86,7 @@
                        android:layout_margin="10dp"
                        android:layout_alignParentRight="true"
                        android:paddingLeft="60dp"
-                       android:background="@color/transparency"
+                       android:background="@null"
                        android:button="@drawable/custom_checkbox_homepage"
                        android:layout_width="25dp"
                        android:layout_height="25dp"/>

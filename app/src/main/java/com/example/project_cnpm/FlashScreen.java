@@ -51,7 +51,7 @@ public class FlashScreen extends AppCompatActivity {
                 overridePendingTransition(R.anim.load_in,R.anim.load_out);
                 finish();
             }
-        },3000);
+        },2000);
     }
 }
 
