@@ -1,6 +1,7 @@
 package com.example.project_cnpm;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,8 +16,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.project_cnpm.Admin.LoginAdminActivity;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -80,6 +83,14 @@ public class HeaderFragment extends Fragment {
                 dialog.setContentView(R.layout.dialog_menu);
 
                 setPosition(dialog,150);
+
+                TextView btnRedirectAdmin = dialog.findViewById(R.id.btn_redirect_admin_page);
+                btnRedirectAdmin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), LoginAdminActivity.class));
+                    }
+                });
 
                 dialog.show();
             }

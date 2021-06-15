@@ -117,7 +117,7 @@
     <!--           />-->
     <LinearLayout
         android:id="@+id/btnBack_hompage"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:orientation="horizontal">
@@ -139,7 +139,7 @@
         android:layout_width="118dp"
         android:layout_height="105dp"
         android:layout_gravity="center|top"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="135dp"
         android:src="@drawable/user" />
 
 </FrameLayout>

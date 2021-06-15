@@ -29,6 +29,7 @@
                     android:layout_height="wrap_content"
                     android:text="Cài đặt"/>
                 <TextView
+                    android:id="@+id/btn_redirect_admin_page"
                     android:layout_marginTop="20dp"
                     android:layout_margin="5dp"
                     android:layout_width="wrap_content"

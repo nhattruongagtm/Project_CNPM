@@ -13,8 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_CNPM">
-        <activity android:name=".DishesPage.DetailDishActivity"></activity>
-        <activity android:name=".TestVolleyActivity"></activity>
+        <activity android:name=".Admin.LoginAdminActivity"></activity>
+        <activity android:name=".DishesPage.DetailDishActivity" />
+        <activity android:name=".TestVolleyActivity" />
         <activity android:name=".FlashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

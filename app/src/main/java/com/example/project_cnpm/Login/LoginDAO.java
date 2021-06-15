@@ -43,7 +43,6 @@ import java.util.Map;
 public class LoginDAO {
     private LoginActivity context;
 
-
     public LoginDAO(LoginActivity context) {
         this.context = context;
     }
