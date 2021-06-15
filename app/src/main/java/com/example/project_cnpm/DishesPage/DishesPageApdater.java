@@ -37,6 +37,7 @@ public class DishesPageApdater extends RecyclerView.Adapter<DishesPageApdater.Di
     @Override
     public DishesPageHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_dishes_page_item,parent,false);
+
         return new DishesPageHolder(view);
     }
 
@@ -52,15 +53,17 @@ public class DishesPageApdater extends RecyclerView.Adapter<DishesPageApdater.Di
         holder.price.setText(dish.getPrice()+ " VNĐ");
         holder.img.setImageResource(dish.getImg());
 
+
         holder.background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // context.startActivities(new Intent[]{new Intent(context, DetailDishFragment.class)});
-                Log.d("AAA",position+"");
+                Log.d("aaa",position+"");
+                Intent intent = new Intent(context,DetailDishActivity.class);
+                intent.putExtra("backgroundColor",dish.getBackground());
+                Log.d("aaa",dish.getBackground()+"");
+                context.startActivity(intent);
             }
         });
-
-
     }
 
     @Override
