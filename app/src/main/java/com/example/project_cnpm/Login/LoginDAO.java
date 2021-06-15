@@ -42,146 +42,20 @@ import java.util.Map;
 
 public class LoginDAO {
     private LoginActivity context;
-    private boolean check;
-    String result = "";
-    private Handler handler;
-
 
 
     public LoginDAO(LoginActivity context) {
         this.context = context;
     }
 
-    public void checkLogin(String email, String password){
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response.trim().equals("successful")) {
-
-                            getAccount(email, password);
-
-                            check = true;
-                            result = response;
-                            DataLocalManager.setResultLogin("successful");
-
-
-                            Message message = new Message();
-
-                            message.what = 1;
-                            message.arg1 = 0;
-                            handler.sendMessage(message);
-
-                            Log.d("RRR", "check1: " + check);
-
-                        } else if (response.trim().equals("fail")) {
-
-                            Message message = new Message();
-
-                            message.what = 1;
-                            message.arg1 = 1;
-                            handler.sendMessage(message);
-
-                            check = false;
-                            result = response;
-                            DataLocalManager.setResultLogin("fail");
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("CCC", error.toString());
-                        Message message = new Message();
-
-                        message.what = 1;
-                        message.arg1 = 2;
-                        handler.sendMessage(message);
-                    }
-                }) {
-            @Nullable
-            @org.jetbrains.annotations.Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("password", password);
-                return params;
+    public boolean checkLogin(String email,String password){
+        for (Map.Entry<String,String> m : context.accounts.entrySet()){
+            if(email.equals(m.getKey())& password.equals(m.getValue())){
+                return true;
             }
-        };
-        requestQueue.add(stringRequest);
+        }
+        return false;
     }
-    private class LoginDAOAsyntask extends AsyncTask<Void, Void, Void> {
-
-        private String email;
-        private String password;
-
-        public LoginDAOAsyntask(String email, String password) {
-            this.email = email;
-            this.password = password;
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... Voids) {
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
-            String url = "https://appfooddb.000webhostapp.com/checkLogin.php";
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if (response.trim().equals("successful")) {
-
-                                getAccount(email, password);
-
-                                check = true;
-                                result = response;
-                                DataLocalManager.setResultLogin("successful");
-
-                                Log.d("RRR", "check1: " + check);
-
-                            } else if (response.trim().equals("fail")) {
-
-                                check = false;
-                                result = response;
-                                DataLocalManager.setResultLogin("fail");
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("CCC", error.toString());
-                        }
-                    }) {
-                @Nullable
-                @org.jetbrains.annotations.Nullable
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("email", email);
-                    params.put("password", password);
-                    return params;
-                }
-            };
-            requestQueue.add(stringRequest);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void unused) {
-            super.onPostExecute(unused);
-            result = DataLocalManager.getResultLogin();
-        }
-    }
-
     public void getAccount(String email, String password) {
         Customer account = new Customer();
         String url = "http://appfooddb.000webhostapp.com/getAccount.php";
@@ -245,43 +119,5 @@ public class LoginDAO {
             };
             requestQueue.add(jsonArrayRequest);
         }
-    }
-    public HashMap<String,String> getAllAccount(){
-        HashMap<String,String> users = new HashMap<>();
-        String url = "https://appfooddb.000webhostapp.com/getAllAccount.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++){
-                            JSONObject object = new JSONObject();
-                            try {
-                                users.put(object.getString("email"),object.getString("password"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-        requestQueue.add(stringRequest);
-
-        Log.d("SSS",users.toString());
-
-        return users;
-    }
-
-    public Handler getHandler() {
-        return handler;
-    }
-
-    public void setHandler(Handler handler) {
-        this.handler = handler;
     }
 }

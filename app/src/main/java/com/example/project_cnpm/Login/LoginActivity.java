@@ -76,12 +76,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     ILoginController loginController;
 
-
     //google api
     GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
     private int RC_SIGN_IN = 0;
     TextView btnChangeSignUp;
+    HashMap<String,String> accounts = new HashMap<>();
     LinearLayout btnBack;
 
     // khai báo đăng nhập bầng username và password
@@ -98,6 +98,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         setContentView(R.layout.login);
 
         mapping();
+        getAllAccount();
 
         loginController = new LoginController(this,new LoginDAO(this));
 
@@ -122,6 +123,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 saveInput = isChecked;
             }
         });
+        if(notify.getText().toString().equals("*Đăng nhập thành công!")){
+            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            finish();
+        }
 
         if(DataLocalManager.getLoginInput() != null) {
             String m = "", p = "";
@@ -267,8 +272,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                             };
                             requestQueue.add(stringRequest);
 
-
-
                             if (DataLocalManager.getAccount()!= null){
                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
                             }
@@ -311,33 +314,26 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
                     String mail = email.getText().toString().trim();
                     String pass = password.getText().toString().trim();
                     Log.d("CCC",mail+"-----"+pass);
-                    MD5 md5 = new MD5();
                    // login(mail,md5.enryptPassword(pass));
-                    loginController.login(mail,md5.enryptPassword(pass));
+                  //  loginController.login(mail,md5.enryptPassword(pass));
+                    Log.d("SSS",loginController.login(mail,pass)+"");
 
-//                    if(loginController.login(mail,md5.enryptPassword(pass))){
-//                         if (saveInput){
-//                                DataLocalManager.setSaveAccount(email.getText().toString(),password.getText().toString());
-//                         }
-//                        else{
-//                            DataLocalManager.setSaveAccount(null,null);
-//                        }
-//                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
-//                    }
 
-//                    Log.d("RRR","check: "+ loginController.login(mail,md5.enryptPassword(pass))+"");
-
-                    if(DataLocalManager.getAccount()!=null){
+                    if(loginController.login(mail,pass)){
+                         if (saveInput){
+                                DataLocalManager.setSaveAccount(email.getText().toString(),password.getText().toString());
+                         }
+                        else{
+                            DataLocalManager.setSaveAccount(null,null);
+                        }
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                     }
 
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
+                   // Log.d("RRR","check: "+ loginController.login(mail,md5.enryptPassword(pass))+"");
+
 
             }
         });
@@ -525,6 +521,31 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
+                    }
+                });
+        requestQueue.add(stringRequest);
+    }
+    public void getAllAccount(){
+        String url = "https://appfooddb.000webhostapp.com/getAllAccount.php";
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest stringRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length();i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                accounts.put(object.getString("email"),object.getString("password"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
         requestQueue.add(stringRequest);
