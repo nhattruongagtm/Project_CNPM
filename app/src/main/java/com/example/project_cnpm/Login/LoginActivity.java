@@ -3,11 +3,9 @@ package com.example.project_cnpm.Login;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,11 +13,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,7 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Controller.ILoginController;
 import com.example.project_cnpm.Controller.LoginController;
-import com.example.project_cnpm.MD5.MD5;
+import com.example.project_cnpm.DAO.LoginDAO;
 import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.Model.User;
@@ -44,10 +40,8 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -63,8 +57,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     private SignInButton signInButton;
     private int RC_SIGN_IN = 0;
     TextView btnChangeSignUp;
-    HashMap<String,String> accounts = new HashMap<>();
+    public HashMap<String,String> accounts = new HashMap<>();
     LinearLayout btnBack;
 
     // khai báo đăng nhập bầng username và password
@@ -316,11 +308,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             public void onClick(View v) {
                     String mail = email.getText().toString().trim();
                     String pass = password.getText().toString().trim();
-                    Log.d("CCC",mail+"-----"+pass);
-                   // login(mail,md5.enryptPassword(pass));
-                  //  loginController.login(mail,md5.enryptPassword(pass));
-                    Log.d("SSS",loginController.login(mail,pass)+"");
-
 
                     if(loginController.login(mail,pass)){
                          if (saveInput){
@@ -332,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                     }
 
-                   // Log.d("RRR","check: "+ loginController.login(mail,md5.enryptPassword(pass))+"");
+
 
 
             }

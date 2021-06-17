@@ -1,16 +1,8 @@
 package com.example.project_cnpm.Controller;
 
-import android.annotation.SuppressLint;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.example.project_cnpm.Login.LoginDAO;
+import com.example.project_cnpm.DAO.LoginDAO;
 import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.Model.User;
-import com.example.project_cnpm.SharedReferences.DataLocalManager;
 import com.example.project_cnpm.View.ILoginView;
 
 import java.security.NoSuchAlgorithmException;

@@ -64,6 +64,10 @@ public class User implements Serializable, IUser {
             // không nhập password
             return 2;
         }
+        else if (getPassword().length()<8){
+            return 3;
+            // password phải có tối thiểu 8 ký tự
+        }
         else{
             return -1;
         }

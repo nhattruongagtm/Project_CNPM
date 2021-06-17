@@ -1,4 +1,4 @@
-package com.example.project_cnpm.Login;
+package com.example.project_cnpm.DAO;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.Model.User;
