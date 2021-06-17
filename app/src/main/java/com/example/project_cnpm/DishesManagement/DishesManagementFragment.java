@@ -2,6 +2,7 @@ package com.example.project_cnpm.DishesManagement;
 
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,12 +12,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project_cnpm.Admin.AdminPage;
+import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.R;
 
 import java.util.ArrayList;
@@ -24,6 +28,9 @@ import java.util.ArrayList;
 public class DishesManagementFragment extends Fragment {
     ImageView btnMenuAdmin;
     RecyclerView recyclerDishesManegement;
+
+    ImageView btnHome;
+    TextView txtHome;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +45,11 @@ public class DishesManagementFragment extends Fragment {
         recyclerDishesManegement = view.findViewById(R.id.dish_management_recycler);
 
         createDishesManagement();
+
         btnMenuAdmin = view.findViewById(R.id.btnMenuAdmin);
+
+        btnHome = view.findViewById(R.id.imgHome);
+        txtHome = view.findViewById(R.id.txtHome);
 
         btnMenuAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +60,20 @@ public class DishesManagementFragment extends Fragment {
                 setPosition(dialog,120);
 
                 dialog.show();
+            }
+        });
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), AdminPage.class));
+            }
+        });
+
+        txtHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), AdminPage.class));
             }
         });
         return view;

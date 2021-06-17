@@ -5,5 +5,8 @@
 
     <string name="facebook_app_id">824754281786089</string>
     <string name="fb_login_protocol_scheme">fb824754281786089</string>
-
+    <string name="name">Tên món ăn</string>
+    <string name="price">Giá</string>
+    <string name="type">Loại</string>
+    <string name="description">Mô tả</string>
 </resources>
