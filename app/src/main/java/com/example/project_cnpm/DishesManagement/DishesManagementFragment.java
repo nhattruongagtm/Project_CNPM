@@ -48,7 +48,7 @@ public class DishesManagementFragment extends Fragment {
         btnMenuAdmin = view.findViewById(R.id.btnMenuAdmin);
 
         ///
-        btnAdd = view.findViewById(R.id.btnAddDish);
+        btnAdd = view.findViewById(R.id.btnAdd);
         ///
 
         btnHome = view.findViewById(R.id.imgHome);
@@ -119,14 +119,14 @@ public class DishesManagementFragment extends Fragment {
     }
     public ArrayList<DishManagement> getDishesMangement(){
         ArrayList<DishManagement> list = new ArrayList<>();
-        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true,R.drawable.pizza_home_page_item));
-        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true,R.drawable.pizza_home_page_item));
-        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true,R.drawable.pizza_home_page_item));
-        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true,R.drawable.pizza_home_page_item));
-        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true,R.drawable.pizza_home_page_item));
-        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true,R.drawable.pizza_home_page_item));
-        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true,R.drawable.pizza_home_page_item));
-        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true,R.drawable.pizza_home_page_item));
+        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true, R.drawable.pizza_home_page_item));
+        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true, R.drawable.pizza_home_page_item));
+        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true, R.drawable.pizza_home_page_item));
+        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true, R.drawable.pizza_home_page_item));
+        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true, R.drawable.pizza_home_page_item));
+        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true, R.drawable.pizza_home_page_item));
+        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true, R.drawable.pizza_home_page_item));
+        list.add(new DishManagement("001","Pizza hải sản cao cấp",159000,0,"Pizza",true, R.drawable.pizza_home_page_item));
         return list;
     }
 
