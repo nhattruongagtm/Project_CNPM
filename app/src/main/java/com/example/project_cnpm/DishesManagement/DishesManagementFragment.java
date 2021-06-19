@@ -14,13 +14,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_cnpm.Admin.AdminPage;
-import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.R;
 
 import java.util.ArrayList;
@@ -31,6 +29,7 @@ public class DishesManagementFragment extends Fragment {
 
     ImageView btnHome;
     TextView txtHome;
+    Button btnAdd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,8 +47,23 @@ public class DishesManagementFragment extends Fragment {
 
         btnMenuAdmin = view.findViewById(R.id.btnMenuAdmin);
 
+        ///
+        btnAdd = view.findViewById(R.id.btnAddDish);
+        ///
+
         btnHome = view.findViewById(R.id.imgHome);
         txtHome = view.findViewById(R.id.txtHome);
+
+        ///
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Fragment f = new AddDishFragment();
+//                loadFragment(f);
+                startActivity(new Intent(getActivity(), AddDishActivity.class));
+            }
+        });
+        ///
 
         btnMenuAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +92,12 @@ public class DishesManagementFragment extends Fragment {
         });
         return view;
     }
-
+        ////
+    private void loadFragment(Fragment fragment) {
+        // replace fragment
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.dish_management_fragment,fragment).commit();
+        }
+        ////
 
     public void setPosition(Dialog dialog,int yValue) {
         Window window = dialog.getWindow();
