@@ -5,6 +5,8 @@ import com.example.project_cnpm.DAO.SignUpDAO;
 import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.View.ISignUpView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -54,7 +56,7 @@ public class SignUpController implements ISignUpController{
                         return true;
                     }
                     else{
-                        signUpView.showSignUpFail("*Đã xảy ra lỗi, vui lòng thử lại!");
+                        //signUpView.showSignUpFail("*Đã xảy ra lỗi, vui lòng thử lại!");
                         return false;
                     }
                 } catch (NoSuchAlgorithmException e) {

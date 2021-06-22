@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class UserFragment extends Fragment {
             startActivity(new Intent(getActivity(), LoginActivity.class));
         }
         else{
+            Log.d("SSSS",account.toString());
             fragment = new ProfileFragment();
         }
         if(fragment != null){

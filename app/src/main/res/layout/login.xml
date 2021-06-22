@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center|top"
         android:textColor="#FFFFFF"
         android:text="Đăng nhập"/>
@@ -23,7 +23,7 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content">
            <LinearLayout
-               android:layout_width="340dp"
+               android:layout_width="320dp"
                android:layout_height="420dp"
                android:background="#F8F6F2"
                android:orientation="vertical"
@@ -178,7 +178,7 @@
        </androidx.cardview.widget.CardView>
    </LinearLayout>
     <ImageView
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="110dp"
         android:layout_gravity="center|top"
         android:layout_width="100dp"
         android:layout_height="90dp"

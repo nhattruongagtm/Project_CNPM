@@ -48,19 +48,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:src="@drawable/ic_baseline_star_24"
+                        android:src="@drawable/ic_baseline_star_24_r"
                         android:layout_width="10dp"
                         android:layout_height="10dp"/>
                     <ImageView
-                        android:src="@drawable/ic_baseline_star_24"
+                        android:src="@drawable/ic_baseline_star_24_r"
                         android:layout_width="10dp"
                         android:layout_height="10dp"/>
                     <ImageView
-                        android:src="@drawable/ic_baseline_star_24"
+                        android:src="@drawable/ic_baseline_star_24_r"
                         android:layout_width="10dp"
                         android:layout_height="10dp"/>
                     <ImageView
-                        android:src="@drawable/ic_baseline_star_24"
+                        android:src="@drawable/ic_baseline_star_24_r"
                         android:layout_width="10dp"
                         android:layout_height="10dp"/>
                     <ImageView

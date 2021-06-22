@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
@@ -14,9 +15,21 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.project_cnpm.Database.Database;
 import com.example.project_cnpm.SignUp.SignUpActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +47,8 @@ import javax.mail.internet.MimeMessage;
 public class SignUpDAO {
     SignUpActivity context;
 
+    HashMap<String,String> accounts = new HashMap<>();
+
     public SignUpDAO(SignUpActivity context) {
         this.context = context;
     }
@@ -49,12 +64,12 @@ public class SignUpDAO {
 
     public void checkSignUp(String email, String password) {
         String url = "https://appfooddb.000webhostapp.com/signUp.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("SSS",response);
+                        writeData(email,password);
                     }
                 },
                 new Response.ErrorListener() {
@@ -73,14 +88,15 @@ public class SignUpDAO {
                 return params;
             }
         };
-        requestQueue.add(stringRequest);
+        Database.getInstance(context).excuteQuery(stringRequest);
     }
 
     public boolean signUp(String email, String password) {
         checkSignUp(email, password);
-        context.getAllAccount();
-        for (Map.Entry<String, String> m : context.accounts.entrySet()) {
-            if (m.getKey().equals(email) && m.getKey().equals(password)) {
+        getAllAccount();
+        Log.d("SSS",accounts.toString());
+        for (Map.Entry<String, String> m : accounts.entrySet()) {
+            if (m.getKey().equals(email) && m.getValue().equals(password)) {
                 return true;
             }
         }
@@ -118,10 +134,42 @@ public class SignUpDAO {
             e.printStackTrace();
         }
     }
+    public void writeData(String email,String password){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference().child("account");
 
-    public static void main(String[] args) {
-        SignUpActivity context = new SignUpActivity();
-        SignUpDAO test = new SignUpDAO(context);
-        test.sendMail("nhattruongagtmzxc@gmail.com");
+        for (Map.Entry<String,String> m : context.accounts.entrySet()){
+            myRef.child(setKey(m.getKey())).child("email").setValue(m.getKey());
+            myRef.child(setKey(m.getKey())).child("password").setValue(m.getValue());
+
+        }
+        myRef.child(setKey(email)).child("email").setValue(email);
+        myRef.child(setKey(email)).child("password").setValue(password);
     }
+    public void getAllAccount(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference().child("account");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()){
+                    String key = ds.getValue(String.class);
+                    String value = ds.getValue(String.class);
+                    accounts.put(key,value);
+                }
+                Log.d("SSS",accounts.toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                return;
+            }
+        });
+    }
+    public String setKey(String key){
+        return key.substring(0,key.indexOf("@gmail.com"));
+    }
+
+
 }

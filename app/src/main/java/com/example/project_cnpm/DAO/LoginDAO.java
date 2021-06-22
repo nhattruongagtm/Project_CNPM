@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.project_cnpm.Database.Database;
 import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.Model.Customer;
@@ -62,8 +63,6 @@ public class LoginDAO {
         if (email == null || password == null) {
             return;
         } else {
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
-
             StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -96,6 +95,9 @@ public class LoginDAO {
 
                                 DataLocalManager.setAccount(account);
 
+
+                                Log.d("ZZZ", "response: "+response);
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -117,7 +119,7 @@ public class LoginDAO {
                     return params;
                 }
             };
-            requestQueue.add(jsonArrayRequest);
+            Database.getInstance(context).excuteQuery(jsonArrayRequest);
         }
     }
 }

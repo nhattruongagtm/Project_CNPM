@@ -18,6 +18,9 @@ public class Dish {
         this.status = status;
         this.img = img;
     }
+    public Dish(){
+
+    }
 
     public String getId() {
         return id;

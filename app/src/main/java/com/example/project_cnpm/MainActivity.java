@@ -30,6 +30,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
 
         // load customer sau khi đăng nhập
         googleAPI();
+
+        //
+        Customer account = DataLocalManager.getAccount();
+        if(account != null) {
+            Log.d("ZZZ", account.toString());
+        }
+        else{
+            Log.d("ZZZ", "account ================= null");
+        }
 
     }
 

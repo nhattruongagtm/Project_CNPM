@@ -4,8 +4,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,6 +61,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,7 +70,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
-   // private AccessTokenTracker accessTokenTracker;
 
     ILoginController loginController;
 
@@ -137,6 +142,14 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             email.setText(m + "");
             password.setText(p + "");
 
+        }
+        // sign up thành công
+        Intent intent = getIntent();
+        if (intent.getStringExtra("email_signup") != null){
+            email.setText(intent.getStringExtra("email_signup"));
+            password.setText("");
+            btnSave.setChecked(false);
+            Toast.makeText(this, intent.getStringExtra("notify"), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -372,18 +385,18 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             handleSignInResult(task);
         }
     }
-    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-            if(currentAccessToken == null){
-                LoginManager.getInstance().logOut();
-            }
-        }
-    };
+//    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+//        @Override
+//        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+//            if(currentAccessToken == null){
+//                LoginManager.getInstance().logOut();
+//            }
+//        }
+//    };
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        accessTokenTracker.startTracking();
+      //  accessTokenTracker.startTracking();
     }
     public void loginGoogle(){
         signInButton = findViewById(R.id.sign_in_button);

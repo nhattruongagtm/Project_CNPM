@@ -26,12 +26,15 @@ import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.R;
 import com.example.project_cnpm.View.ISignUpView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity implements ISignUpView {
     TextView btnChangeLogin;
@@ -53,6 +56,7 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
 
         mapping();
         getAllAccount();
+
 
         signUpController = new SignUpController(this,new SignUpDAO(this));
 
@@ -87,6 +91,7 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
                 else if(signUpController.signup(mail,pass)){
                     Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
                     intent.putExtra("email_signup",mail);
+                    intent.putExtra("notify","Đăng ký thành công!");
                     startActivity(intent);
                 }
             }

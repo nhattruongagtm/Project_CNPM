@@ -62,18 +62,9 @@ public class HeaderFragment extends Fragment {
             Glide.with(this).load(String.valueOf(account.getAvatar())).into(imgCustomer);
         }
 
-        // sign out
-        imgCustomer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataLocalManager.setValid(false);
-                signOut();
-            }
-        });
-
 
         googleAPI();
-        loadCustomer(view);
+        loadCustomer();
 
         // handler btn menu
         btnMenu.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +115,7 @@ public class HeaderFragment extends Fragment {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
     }
-    public void loadCustomer(View view){
+    public void loadCustomer(){
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
         if (acct != null) {
             String personName = acct.getDisplayName();
