@@ -162,22 +162,12 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
                             for (int i = 0; i < array.length();i++){
                                 try {
                                     JSONObject object = array.getJSONObject(i);
-                                    Dish dish = new Dish();
-
-                                    dish.setId(object.getString("idDish"));
-                                    dish.setName(object.getString("name"));
-                                    dish.setIdCategory(object.getString("idCategory"));
-                                    dish.setStatus(Integer.parseInt(object.getString("status")));
-                                    dish.setDescribe(object.getString("describe"));
 
                                     DishPageModel dishPageModel = new DishPageModel();
-                                    dishPageModel.setId(dish.getId());
-                                    dishPageModel.setName(dish.getName());
-                                    dishPageModel.setId(dish.getId());
+                                    dishPageModel.setId(object.getString("idDish"));
+                                    dishPageModel.setName(object.getString("name"));
                                     dishPageModel.setPrice(Integer.parseInt(object.getString("price")));
                                     dishPageModel.setImg(object.getString("linkImage"));
-
-                                    Log.d("dishes", dish.toString());
 
                                     dishes.add(dishPageModel);
 

@@ -314,15 +314,16 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <TextView
-                        android:textSize="22dp"
-                        android:fontFamily="@font/amaranth"
-                        android:textStyle="bold"
-                        android:gravity="center"
-                        android:textColor="#CF0011"
-                        android:text="199.000 VNĐ"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/amaranth"
+                        android:gravity="center"
+                        android:text="199.000 VNĐ"
+                        android:textColor="#CF0011"
+                        android:textSize="22dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
             <androidx.cardview.widget.CardView

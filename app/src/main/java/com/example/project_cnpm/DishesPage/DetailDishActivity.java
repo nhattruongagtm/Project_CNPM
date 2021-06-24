@@ -1,5 +1,6 @@
 package com.example.project_cnpm.DishesPage;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -11,13 +12,41 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.example.project_cnpm.Database.Database;
+import com.example.project_cnpm.Model.DateTime;
+import com.example.project_cnpm.Model.Dish;
+import com.example.project_cnpm.Model.Image;
+import com.example.project_cnpm.Model.Price;
+import com.example.project_cnpm.Model.PriceSale;
+import com.example.project_cnpm.Model.Size;
 import com.example.project_cnpm.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class DetailDishActivity extends AppCompatActivity {
     ImageView btnBack;
     FrameLayout background;
+    TextView name,des,price;
+    ImageView img;
+    Dish dish;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,10 +57,27 @@ public class DetailDishActivity extends AppCompatActivity {
         mapping();
 
         Intent intent = getIntent();
-        Log.d("aaa",intent.getIntExtra("backgroundColor",0)+"");
+
         if (intent !=null) {
             background.setBackgroundColor(intent.getIntExtra("backgroundColor",0));
         }
+        Log.d("NNN",intent.getStringExtra("idDish"));
+        String id = intent.getStringExtra("idDish");
+        getDishById(id);
+
+        name.setText(intent.getStringExtra("name")+"");
+        des.setText("");
+
+        int sPrice = intent.getIntExtra("price",0);
+        price.setText(sPrice+" VNĐ");
+
+        Glide.with(this).load(intent.getStringExtra("img")).into(img);
+
+
+
+
+
+
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,8 +87,105 @@ public class DetailDishActivity extends AppCompatActivity {
         });
 
     }
+    private void getDishById(String id){
+        String url = "https://appfooddb.000webhostapp.com/getDishById.php";
+        dish = new Dish();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Log.d("size",response);
+                            JSONObject object = new JSONObject(response);
+
+                            dish.setId(object.getString("idDish"));
+                            dish.setName(object.getString("name"));
+                            dish.setDescribe(object.getString("describe"));
+                            dish.setDateCreated(new DateTime(object.getString("dateCreated")));
+                            dish.setStatus(Integer.parseInt(object.getString("status")));
+                            dish.setIdCategory(object.getString("idCategory"));
+
+                            // lay gia
+                            JSONArray price = new JSONArray(object.getString("price"));
+                            ArrayList<Price> prices = new ArrayList<>();
+                            for (int i = 0; i< price.length();i++){
+                                Price p = new Price();
+                                JSONObject ob = price.getJSONObject(i);
+                                p.setIdDish(ob.getString("idDish"));
+                                p.setPrice(Integer.parseInt(ob.getString("price")));
+                                p.setDateCreated(new DateTime(ob.getString("dateCreated")));
+                                prices.add(p);
+                            }
+                            // lay gia khuyen mai
+                            JSONArray priceSalse = new JSONArray(object.getString("priceSale"));
+                            ArrayList<PriceSale> priceSales = new ArrayList<>();
+                            for (int i = 0; i< priceSalse.length();i++){
+                                PriceSale p = new PriceSale();
+                                JSONObject ob = priceSalse.getJSONObject(i);
+                                p.setIdDish(ob.getString("idDish"));
+                                p.setPriceSale(Integer.parseInt(ob.getString("priceSale")));
+                                p.setDateCreated(new DateTime(ob.getString("dateCreated")));
+                                priceSales.add(p);
+                            }
+                            // lay hinh anh
+                            JSONArray image = new JSONArray(object.getString("linkImage"));
+                            ArrayList<Image> images = new ArrayList<>();
+                            for (int i = 0; i< image.length();i++){
+                                Image im = new Image();
+                                JSONObject ob = image.getJSONObject(i);
+                                im.setIdImage(ob.getString("idImage"));
+                                im.setLinkImage(ob.getString("linkImage"));
+                                im.setIdDish(ob.getString("idDish"));
+                                images.add(im);
+                            }
+                            // lay size
+                            JSONArray size = new JSONArray(object.getString("size"));
+                            ArrayList<Size> sizes = new ArrayList<>();
+                            for (int i = 0; i< size.length();i++){
+                                Size p = new Size();
+                                JSONObject ob = size.getJSONObject(i);
+                                p.setIdSize(ob.getString("idSize"));
+                                p.setNameSize(ob.getString("nameSize"));
+                                sizes.add(p);
+                            }
+                            dish.setImg(images);
+                            dish.setSize(sizes);
+                            dish.setPrice(prices);
+                            dish.setPriceSale(priceSales);
+
+                            des.setText(dish.getDescribe());
+
+                            Log.d("size", dish.toString());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(DetailDishActivity.this, "Loi tai mon an", Toast.LENGTH_SHORT).show();
+                    }
+                }){
+            @Nullable
+            @org.jetbrains.annotations.Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("idDish",id);
+                return params;
+            }
+        };
+        Database.getInstance(this).excuteQuery(stringRequest);
+    }
     public void mapping() {
         btnBack = findViewById(R.id.btnBack_from_detail);
         background = findViewById(R.id.background_detail);
+        name = findViewById(R.id.activity_detail_name);
+        des = findViewById(R.id.activity_detail_des);
+        price = findViewById(R.id.activity_detail_price);
+        img = findViewById(R.id.activity_detail_img);
     }
 }

@@ -16,6 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
+                android:src="@drawable/ic_baseline_blur_circular_24"
+                android:layout_gravity="center"
+                android:layout_width="110dp"
+                android:layout_height="110dp"/>
+            <ImageView
                 android:id="@+id/dishes_img"
                 android:layout_gravity="center"
                 android:layout_width="110dp"

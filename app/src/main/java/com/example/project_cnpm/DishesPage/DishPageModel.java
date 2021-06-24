@@ -1,6 +1,8 @@
 package com.example.project_cnpm.DishesPage;
 
-public class DishPageModel {
+import java.io.Serializable;
+
+public class DishPageModel implements Serializable {
     private String id;
     private String name;
     private int price;

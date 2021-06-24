@@ -10,25 +10,36 @@ public class Dish {
     private ArrayList<Size> size;
     private ArrayList<Price> price;
     private ArrayList<PriceSale> priceSale;
-    private Date dateCreated;
+    private ArrayList<Image> img;
+    private DateTime dateCreated;
     private int restNumber;
     private String idCategory;
     private int status;
 
-    public Dish(String id, String name, String describe, ArrayList<Size> size, ArrayList<Price> price, ArrayList<PriceSale> priceSale, Date dateCreated, int restNumber, String idCategory, int status) {
+    public Dish(String id, String name, String describe, ArrayList<Size> size, ArrayList<Price> price, ArrayList<PriceSale> priceSale, ArrayList<Image> img, DateTime dateCreated, int restNumber, String idCategory, int status) {
         this.id = id;
         this.name = name;
         this.describe = describe;
         this.size = size;
         this.price = price;
         this.priceSale = priceSale;
+        this.img = img;
         this.dateCreated = dateCreated;
         this.restNumber = restNumber;
         this.idCategory = idCategory;
         this.status = status;
     }
+
     public Dish(){
 
+    }
+
+    public ArrayList<Image> getImg() {
+        return img;
+    }
+
+    public void setImg(ArrayList<Image> img) {
+        this.img = img;
     }
 
     public String getId() {
@@ -79,11 +90,11 @@ public class Dish {
         this.priceSale = priceSale;
     }
 
-    public Date getDateCreated() {
+    public DateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(DateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -120,6 +131,7 @@ public class Dish {
                 ", size=" + size +
                 ", price=" + price +
                 ", priceSale=" + priceSale +
+                ", img=" + img +
                 ", dateCreated=" + dateCreated +
                 ", restNumber=" + restNumber +
                 ", idCategory='" + idCategory + '\'' +

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,8 +62,13 @@ public class DishesPageApdater extends RecyclerView.Adapter<DishesPageApdater.Di
             public void onClick(View v) {
                 Log.d("aaa",position+"");
                 Intent intent = new Intent(context,DetailDishActivity.class);
+
+                intent.putExtra("idDish",dish.getId());
+                intent.putExtra("name",dish.getName());
+                intent.putExtra("price",dish.getPrice());
+                intent.putExtra("img",dish.getImg());
                 intent.putExtra("backgroundColor",dish.getBackground());
-                Log.d("aaa",dish.getBackground()+"");
+
                 context.startActivity(intent);
             }
         });
