@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.project_cnpm.HomePage.Dish;
 import com.example.project_cnpm.R;
 
@@ -51,7 +52,8 @@ public class DishesPageApdater extends RecyclerView.Adapter<DishesPageApdater.Di
         holder.background.setCardBackgroundColor(dish.getBackground());
         holder.name.setText(dish.getName());
         holder.price.setText(dish.getPrice()+ " VNĐ");
-        holder.img.setImageResource(dish.getImg());
+
+        Glide.with(context).load(dish.getImg()).into(holder.img);
 
 
         holder.background.setOnClickListener(new View.OnClickListener() {

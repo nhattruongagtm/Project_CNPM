@@ -4,11 +4,11 @@ public class DishPageModel {
     private String id;
     private String name;
     private int price;
-    private int img;
+    private String img;
     private int background;
 
 
-    public DishPageModel(String id, String name, int price, int img, int background) {
+    public DishPageModel(String id, String name, int price, String img, int background) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -43,11 +43,11 @@ public class DishPageModel {
         this.price = price;
     }
 
-    public int getImg() {
+    public String getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(String img) {
         this.img = img;
     }
 

@@ -24,7 +24,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Database.Database;
+import com.example.project_cnpm.Model.DateTime;
 import com.example.project_cnpm.Model.Dish;
+import com.example.project_cnpm.Model.Price;
+import com.example.project_cnpm.Model.Size;
 import com.example.project_cnpm.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -132,8 +135,9 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
 
             int size = item2.getWidth() * 3;
             tab.animate().x(size).setDuration(100);
-            dishes = new ArrayList<>();
+
             getDishes("ca_4");
+
         }
 
     }
@@ -166,13 +170,15 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
                                     dish.setStatus(Integer.parseInt(object.getString("status")));
                                     dish.setDescribe(object.getString("describe"));
 
-                                    Log.d("dishes", dish.toString());
-
                                     DishPageModel dishPageModel = new DishPageModel();
                                     dishPageModel.setId(dish.getId());
                                     dishPageModel.setName(dish.getName());
-                                    dishPageModel.setPrice(10000);
                                     dishPageModel.setId(dish.getId());
+                                    dishPageModel.setPrice(Integer.parseInt(object.getString("price")));
+                                    dishPageModel.setImg(object.getString("linkImage"));
+
+                                    Log.d("dishes", dish.toString());
+
                                     dishes.add(dishPageModel);
 
                                     recyclerView.setHasFixedSize(true);
@@ -216,9 +222,6 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
             }
         };
         Volley.newRequestQueue(getActivity()).add(jsonArrayRequest);
-
-
-
 
     }
     private ArrayList<Integer> getCorlors(){
