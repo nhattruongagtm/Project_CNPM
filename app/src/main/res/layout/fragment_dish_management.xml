@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/dish_management_fragment"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
+
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -112,124 +111,123 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="101dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
 
-        <LinearLayout
-            android:layout_width="101dp"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingLeft="5dp">
-
-            <ImageView
-                android:id="@+id/imgHome"
-                android:layout_width="26dp"
-                android:layout_height="29dp"
-                app:srcCompat="@drawable/home" />
-
-            <TextView
-                android:id="@+id/txtHome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="5dp"
-                android:paddingTop="10dp"
-                android:text="Trang chủ"
-                android:textAllCaps="false"
-                android:textSize="14sp" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/imgHome"
+            android:layout_width="26dp"
+            android:layout_height="29dp"
+            app:srcCompat="@drawable/home" />
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
+            android:id="@+id/txtHome"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:text="  Danh sách món ăn"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold|italic" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="          " />
-
-            <Button
-                android:id="@+id/btnAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Thêm"
-                app:cornerRadius="20dp" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="           " />
-
-            <Button
-                android:id="@+id/button9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Xóa"
-                app:cornerRadius="20dp" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="           " />
-
-            <Button
-                android:id="@+id/button10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Sửa"
-                app:cornerRadius="20dp" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="          " />
-
-            <!--        <Button-->
-            <!--            android:id="@+id/button10"-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_weight="1"-->
-            <!--            android:text="Sửa"-->
-            <!--            tools:cornerRadius="20dp" />-->
-
-            <!--        <Button-->
-            <!--            android:id="@+id/button11"-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_weight="1"-->
-            <!--            android:text="Xóa"-->
-            <!--            tools:cornerRadius="20dp" />-->
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/dish_management_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:text="Trang chủ"
+            android:textAllCaps="false"
+            android:textSize="14sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:text="  Danh sách món ăn"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold|italic" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="          " />
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Thêm"
+            app:backgroundTint="#FF9800"
+            app:cornerRadius="20dp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="           " />
+
+        <Button
+            android:id="@+id/button9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Xóa"
+            app:backgroundTint="#FF9800"
+            app:cornerRadius="20dp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="           " />
+
+        <Button
+            android:id="@+id/button10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sửa"
+            app:backgroundTint="#FF9800"
+            app:cornerRadius="20dp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="          " />
+
+        <!--        <Button-->
+        <!--            android:id="@+id/button10"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_weight="1"-->
+        <!--            android:text="Sửa"-->
+        <!--            tools:cornerRadius="20dp" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/button11"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_weight="1"-->
+        <!--            android:text="Xóa"-->
+        <!--            tools:cornerRadius="20dp" />-->
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listViewDish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
 
     <!--    <ListView-->
     <!--        android:id="@android:id/list"-->
@@ -243,4 +241,3 @@
     <!--        android:layout_marginTop="5dp"-->
     <!--        android:outlineSpotShadowColor="@color/transparency"-->
     <!--        android:padding="5dp" />-->
-</LinearLayout>

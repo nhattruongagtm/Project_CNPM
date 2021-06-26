@@ -11,11 +11,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.example.project_cnpm.DishesManagement.DishesManagementFragment;
-import com.example.project_cnpm.MainActivity;
+import com.example.project_cnpm.DishesManagement.DishActivity;
 import com.example.project_cnpm.R;
 
 public class AdminPage extends AppCompatActivity {
@@ -52,7 +49,7 @@ public class AdminPage extends AppCompatActivity {
         btnQLMA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdminPage.this, DishesManagementFragment.class));
+                startActivity(new Intent(AdminPage.this, DishActivity.class));
             }
         });
         btnMenuAdmin.setOnClickListener(new View.OnClickListener() {

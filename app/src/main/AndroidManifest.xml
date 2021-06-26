@@ -22,6 +22,7 @@
         <activity android:name=".Admin.LoginAdminActivity"></activity>
         <activity android:name=".DishesPage.DetailDishActivity" />
         <activity android:name=".TestVolleyActivity" />
+        <activity android:name=".DishesManagement.DishActivity"/>
         <activity android:name=".DishesManagement.AddDishActivity"/>
         <activity android:name=".FlashScreen">
             <intent-filter>
