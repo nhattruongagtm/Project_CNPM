@@ -3,6 +3,7 @@ package com.example.project_cnpm.DishesManagement;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -13,22 +14,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Admin.AdminPage;
+import com.example.project_cnpm.Database.Database;
 import com.example.project_cnpm.R;
+import com.example.project_cnpm.Model.Dish;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DishActivity extends AppCompatActivity {
 
@@ -37,7 +45,7 @@ public class DishActivity extends AppCompatActivity {
     ImageView btnHome;
     TextView txtHome;
     ListView lvDish;
-    ArrayList<Dish> arrayDishes;
+    ArrayList<com.example.project_cnpm.DishesManagement.Dish> arrayDishes;
     DishAdapter adapter;
     Button btnAdd;
 
@@ -56,7 +64,7 @@ public class DishActivity extends AppCompatActivity {
         adapter = new DishAdapter(this, R.layout.show_one_dish, arrayDishes);
         lvDish.setAdapter(adapter);
 
-        ReadJSON(urlGetData);
+      //  ReadJSON(urlGetData);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,40 +106,40 @@ public class DishActivity extends AppCompatActivity {
         window.setAttributes(param);
         window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
-    private void ReadJSON(String url){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject object = response.getJSONObject(i);
-                                arrayDishes.add(new Dish(
-                                        object.getString("ID"),
-                                        object.getString("TenMonAn"),
-                                        object.getString("Loai"),
-                                        object.getString("SizeS"),
-                                        object.getInt("GiaS"),
-                                        object.getString("SizeL"),
-                                        object.getInt("GiaL"),
-                                        object.getString("MoTa")
-                                ));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(DishActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
-            }
-        }
-        );
-        requestQueue.add(jsonArrayRequest);
-    }
+//    private void ReadJSON(String url){
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+//        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        for (int i = 0; i < response.length(); i++) {
+//                            try {
+//                                JSONObject object = response.getJSONObject(i);
+//                                arrayDishes.add(new Dish(
+//                                        object.getString("ID"),
+//                                        object.getString("TenMonAn"),
+//                                        object.getString("Loai"),
+//                                        object.getString("SizeS"),
+//                                        object.getInt("GiaS"),
+//                                        object.getString("SizeL"),
+//                                        object.getInt("GiaL"),
+//                                        object.getString("MoTa")
+//                                ));
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(DishActivity.this, "Lỗi!", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//        );
+//        requestQueue.add(jsonArrayRequest);
+//    }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        getMenuInflater().inflate(R.menu.add_student, menu);
@@ -145,5 +153,6 @@ public class DishActivity extends AppCompatActivity {
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
+
 }
 

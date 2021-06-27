@@ -102,9 +102,9 @@ public class SignUpDAO {
         }
         return false;
     }
-    public void sendMail(String emailTo){
-        String sEmail = "eatsimple2021@gmail.com";
-        String sPassword = "iacjphdbzujyglyy";
+    public void sendMail1(String emailTo){
+        String sEmail = "appcnpm2021@gmail.com";
+        String sPassword = "yjghgtlshghopoyi";
         Properties properties = new Properties();
         properties.put("mail.smtp.auth","true");
         properties.put("mail.smtp.starttls.enable","true");
@@ -125,7 +125,7 @@ public class SignUpDAO {
             message.setFrom(new InternetAddress(sEmail));
 
             message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(emailTo));
-            message.setSubject("Xác nhận tài khoản FFood");
+            message.setSubject("Xác nhận tài khoản TVL Food");
             message.setText("Bạn đã đăng ký tài khoản thành công!");
 
             Transport.send(message);
@@ -169,6 +169,87 @@ public class SignUpDAO {
     }
     public String setKey(String key){
         return key.substring(0,key.indexOf("@gmail.com"));
+    }
+
+    public void sendMail(String emailTo){
+        String sEmail = "appcnpm2021@gmail.com";
+        String sPassword = "yjghgtlshghopoyi";
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth","true");
+        properties.put("mail.smtp.starttls.enable","true");
+        properties.put("mail.smtp.host","smtp.gmail.com");
+        properties.put("mail.smtp.port","587");
+
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(sEmail,sPassword);
+            }
+        });
+
+        try {
+            // create content
+            Message message = new MimeMessage(session);
+            // send mail
+            message.setFrom(new InternetAddress(sEmail));
+
+            message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(emailTo));
+            message.setSubject("Xác nhận tài khoản TVL Food");
+            message.setText("Đăng ký tài khoản TVL Food thành công! ");
+            new SendMail().execute(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class SendMail extends AsyncTask<Message,String,String> {
+
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected String doInBackground(Message... messages) {
+            try {
+                Transport.send(messages[0]);
+                return "success";
+            } catch (MessagingException e) {
+                e.printStackTrace();
+                return "error";
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+           // progressDialog = ProgressDialog.show(context,"Vui lòng đợi...","Đang gửi...",true,false);
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+
+           // progressDialog.dismiss();
+            if (s.equals("success")){
+                Log.d("mail","gui mail thanh cong!");
+//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//                builder.setCancelable(false);
+//                builder.setTitle("Gửi mail thành công!");
+//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+
+//                builder.show();
+            }
+            else{
+                Log.d("mail","gui mail khong thanh cong!");
+//                Toast.makeText(MainActivity.this, "Send Error!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 

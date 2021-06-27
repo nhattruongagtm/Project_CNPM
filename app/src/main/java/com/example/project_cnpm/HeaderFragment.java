@@ -80,6 +80,7 @@ public class HeaderFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         startActivity(new Intent(getActivity(), LoginAdminActivity.class));
+                        dialog.dismiss();
                     }
                 });
 

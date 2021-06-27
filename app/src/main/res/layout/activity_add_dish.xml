@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".AddDishActivity">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -59,41 +58,47 @@
                                 android:inputType="text" />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:hint="@string/type">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/txtEditCategory"
-                                android:layout_width="340dp"
-                                android:layout_height="wrap_content"
-                                android:inputType="text" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView
-                            android:id="@+id/textView11"
+                        <LinearLayout
+                            android:paddingLeft="5dp"
+                            android:layout_margin="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="    Kích thước:"
-                            android:textColor="#000000"
-                            android:textSize="16sp" />
+                            android:layout_height="40dp">
+                            <TextView
+                                android:gravity="center"
+                                android:textSize="16dp"
+                                android:textColor="@color/black"
+                                android:text="Loại món ăn:"
+                                android:layout_marginRight="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"/>
+                            <Spinner
+                                android:id="@+id/category_add"
+                                android:layout_width="190dp"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                            <TextView
+                                android:paddingLeft="15dp"
+                                android:id="@+id/textView11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Kích cỡ:"
+                                android:textColor="#000000"
+                                android:textSize="16sp" />
 
                         <LinearLayout
+                            android:layout_gravity="center"
+                            android:gravity="center_horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:orientation="horizontal">
 
-                            <CheckBox
-                                android:id="@+id/cbS"
+                            <TextView
+                                android:textSize="20dp"
+                                android:gravity="center"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:text="S"
                                 android:textColor="#000000" />
@@ -110,10 +115,9 @@
                                     android:id="@+id/txtEditPriceS"
                                     android:layout_width="241dp"
                                     android:layout_height="wrap_content"
-                                    android:inputType="text" />
+                                    android:inputType="number" />
 
                                 <TextView
-                                    android:id="@+id/textView16"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -122,15 +126,18 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:layout_gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:orientation="horizontal">
 
-                            <CheckBox
+                            <TextView
+                                android:textSize="20dp"
                                 android:id="@+id/cbL"
+                                android:gravity="center"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:text="L"
                                 android:textColor="#020000" />
@@ -147,7 +154,7 @@
                                     android:id="@+id/txtEditPriceL"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:inputType="text" />
+                                    android:inputType="number" />
 
                                 <TextView
                                     android:id="@+id/textView16"

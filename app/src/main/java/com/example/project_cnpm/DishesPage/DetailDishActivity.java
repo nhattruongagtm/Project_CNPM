@@ -2,6 +2,7 @@ package com.example.project_cnpm.DishesPage;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -43,15 +44,16 @@ import java.util.Map;
 public class DetailDishActivity extends AppCompatActivity {
     ImageView btnBack;
     FrameLayout background;
-    TextView name,des,price;
+    TextView name,des,price,number,numberImg;
     ImageView img;
+    CardView btnPlus,btnSub;
     Dish dish;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_dish);
-
 
 
         mapping();
@@ -73,9 +75,7 @@ public class DetailDishActivity extends AppCompatActivity {
 
         Glide.with(this).load(intent.getStringExtra("img")).into(img);
 
-
-
-
+        handlerNumber();
 
 
 
@@ -157,6 +157,9 @@ public class DetailDishActivity extends AppCompatActivity {
 
                             Log.d("size", dish.toString());
 
+                            // hiển thị số hình ảnh
+                            numberImg.setText(dish.getImg().size()+"");
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -180,6 +183,32 @@ public class DetailDishActivity extends AppCompatActivity {
         };
         Database.getInstance(this).excuteQuery(stringRequest);
     }
+    public void handlerNumber(){
+        btnPlus = findViewById(R.id.activity_detail_plus);
+        btnSub = findViewById(R.id.activity_detail_sub);
+        number = findViewById(R.id.activity_detail_number);
+
+        number.setText("1");
+
+        btnSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int num = Integer.parseInt(number.getText().toString());
+                if (num > 1){
+                    num--;
+                }
+                number.setText(num+"");
+            }
+        });
+        btnPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int num = Integer.parseInt(number.getText().toString());
+                num++;
+                number.setText(num+"");
+            }
+        });
+    }
     public void mapping() {
         btnBack = findViewById(R.id.btnBack_from_detail);
         background = findViewById(R.id.background_detail);
@@ -187,5 +216,8 @@ public class DetailDishActivity extends AppCompatActivity {
         des = findViewById(R.id.activity_detail_des);
         price = findViewById(R.id.activity_detail_price);
         img = findViewById(R.id.activity_detail_img);
+        numberImg = findViewById(R.id.activity_detail_number_img);
+
+
     }
 }

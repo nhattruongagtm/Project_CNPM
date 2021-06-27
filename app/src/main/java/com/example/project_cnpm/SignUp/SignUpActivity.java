@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -89,6 +90,8 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
                     showSignUpFail("*Mật khẩu không khớp!");
                 }
                 else if(signUpController.signup(mail,pass)){
+                    new SignUpDAO(SignUpActivity.this).sendMail(mail);
+                    Log.d("signup","dang ky thanh cong");
                     Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
                     intent.putExtra("email_signup",mail);
                     intent.putExtra("notify","Đăng ký thành công!");

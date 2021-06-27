@@ -51,8 +51,8 @@ public class SignUpController implements ISignUpController{
                     MD5 md5 = new MD5();
                     String pass = md5.enryptPassword(password);
                     if (signUpModel.signUp(email,pass)){
-                        signUpModel.sendMail(email);
                         signUpView.showSignUpSuccess("*Đăng ký thành công!");
+                        signUpModel.sendMail(email);
                         return true;
                     }
                     else{

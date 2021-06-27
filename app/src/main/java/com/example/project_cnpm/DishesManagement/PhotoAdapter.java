@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_cnpm.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>{
 
     private Context mContext;
-    private List<Uri> mListPhotos;
+    public List<Uri> mListPhotos;
+
 
     public PhotoAdapter(Context mContext) {
         this.mContext = mContext;

@@ -8,11 +8,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|top"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="60dp"
         android:text="Đăng nhập tài khoản Admin"
         android:textColor="#FFFFFF"
-        android:textSize="30dp" />
+        android:textSize="25dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/notify_fail_login"
+                    android:id="@+id/activity_login_admin_notify"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
@@ -40,17 +40,17 @@
                     android:textColor="#F44336" />
 
                 <EditText
-                    android:id="@+id/login_username_w"
+                    android:id="@+id/activity_login_admin_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email"
+                    android:hint="Tên tài khoản"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="5dp"
                     android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/login_password_w"
+                    android:id="@+id/activity_login_admin_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -79,7 +79,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/login_btn_login_fg"
+                    android:id="@+id/activity_login_admin_btnlogin"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="20dp"
