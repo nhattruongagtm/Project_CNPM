@@ -1,5 +1,6 @@
 package com.example.project_cnpm.SignUp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -24,16 +25,22 @@ import com.example.project_cnpm.Controller.SignUpController;
 import com.example.project_cnpm.DAO.SignUpDAO;
 import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.MainActivity;
+import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.R;
 import com.example.project_cnpm.View.ISignUpView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +53,7 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
     CheckBox cb;
     TextView notify;
     public HashMap<String,String> accounts = new HashMap<>();
-
+    public ArrayList<User> accountFirebase = new ArrayList<>();
 
     SignUpController signUpController;
 
@@ -57,6 +64,7 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
 
         mapping();
         getAllAccount();
+        getAccountFirebase();
 
 
         signUpController = new SignUpController(this,new SignUpDAO(this));
@@ -89,14 +97,17 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
                 else if(!pass.equals(repass)){
                     showSignUpFail("*Mật khẩu không khớp!");
                 }
-                else if(signUpController.signup(mail,pass)){
-                    new SignUpDAO(SignUpActivity.this).sendMail(mail);
-                    Log.d("signup","dang ky thanh cong");
+                else{
+                    signUpController.signup(mail,pass);
+                   // new SignUpDAO(SignUpActivity.this).sendMail(mail);
                     Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
                     intent.putExtra("email_signup",mail);
                     intent.putExtra("notify","Đăng ký thành công!");
                     startActivity(intent);
                 }
+//                else{
+//                    showSignUpFail("*Lỗi kết nối! vui lòng thử lại!");
+//                }
             }
         });
     }
@@ -110,6 +121,22 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
         cb = findViewById(R.id.check_signup);
         btnSignUp = findViewById(R.id.btn_signup);
         notify = findViewById(R.id.notify_signup);
+    }
+    public void getAccountFirebase(){
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("account");
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()){
+                    User user = ds.getValue(User.class);
+                    accountFirebase.add(user);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                Toast.makeText(SignUpActivity.this, "Lỗi firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     public void getAllAccount(){
         String url = "https://appfooddb.000webhostapp.com/getAllAccount.php";

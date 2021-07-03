@@ -16,6 +16,7 @@ public class User implements Serializable, IUser {
         this.password = password;
         this.status = status;
     }
+
     public User(){
 
     }

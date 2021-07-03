@@ -1,9 +1,10 @@
 package com.example.project_cnpm.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Dish {
+public class Dish implements Serializable {
     private String id;
     private String name;
     private String describe;

@@ -3,6 +3,7 @@ package com.example.project_cnpm.SharedReferences;
 import android.content.Context;
 
 import com.example.project_cnpm.Model.Customer;
+import com.example.project_cnpm.Model.User;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class DataLocalManager {
     private static final String EMAIL_LOGIN = "EMAIL_LOGIN";
     private static final String PASSWORD_LOGIN = "PASSWORD_LOGIN";
     private static final String RESULT_LOGIN = "RESULT_LOGIN";
+    private static final String RESULT_SIGNUP = "RESULT_SIGNUP";
     private static DataLocalManager instance;
     private MyShareReferences myShareReferences;
 
@@ -37,6 +39,17 @@ public class DataLocalManager {
         Gson gson = new Gson();
         String stringJSONAccount = gson.toJson(account);
         DataLocalManager.getInstance().myShareReferences.putStringValue(REF_ACCOUNT,stringJSONAccount);
+    }
+    public static void setSignUp(User user){
+        Gson gson = new Gson();
+        String stringJSONAccount = gson.toJson(user);
+        DataLocalManager.getInstance().myShareReferences.putStringValue(RESULT_SIGNUP,stringJSONAccount);
+    }
+    public static User getUser(){
+        Gson gson = new Gson();
+        String stringJSONAccount = DataLocalManager.getInstance().myShareReferences.getStringValue(RESULT_SIGNUP);
+        User user = gson.fromJson(stringJSONAccount,User.class);
+        return user;
     }
     public static Customer getAccount(){
         Gson gson = new Gson();

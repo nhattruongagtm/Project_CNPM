@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.service.controls.Control;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +24,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.project_cnpm.Controller.DishController;
+import com.example.project_cnpm.DAO.DishDAO;
 import com.example.project_cnpm.Database.Database;
 import com.example.project_cnpm.Model.DateTime;
 import com.example.project_cnpm.Model.Dish;
+import com.example.project_cnpm.Model.DishView;
 import com.example.project_cnpm.Model.Price;
 import com.example.project_cnpm.Model.Size;
 import com.example.project_cnpm.R;
@@ -42,13 +46,17 @@ import java.util.Map;
 import java.util.Random;
 
 
-public class DishesFragment extends Fragment implements View.OnClickListener{
+public class DishesFragment extends Fragment implements View.OnClickListener, DishView {
     RecyclerView recyclerView;
 
     ColorStateList def;
     TextView item1, item2, item3, item4, tab;
 
     ArrayList<DishPageModel> dishes = new ArrayList<>();
+
+    DishController dishController = new DishController(new DishDAO(this),this);
+
+   // DishController controller = new DishController(new DishDAO(this,recyclerView),this);
 
 
 
@@ -69,7 +77,11 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_dishes, container, false);
 
-        getDishes("ca_1");
+
+
+
+        dishController.getDishes("ca_1");
+       // Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
 
         recyclerView = view.findViewById(R.id.recyler_dishes_page);
 
@@ -81,6 +93,8 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
         item2.setOnClickListener(this);
         item3.setOnClickListener(this);
         item4.setOnClickListener(this);
+
+
 
         return view;
 
@@ -105,7 +119,10 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
             item2.setTextColor(def);
             item3.setTextColor(def);
             item4.setTextColor(def);
-            getDishes("ca_1");
+
+//            controller.getDishes("ca_1");
+        //    Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
+           dishController.getDishes("ca_1");
         }
         else if(v.getId() == R.id.fragment_dishes_tab2){
             item2.setTextColor(Color.WHITE);
@@ -115,7 +132,9 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
 
             int size = item2.getWidth();
             tab.animate().x(size).setDuration(100);
-            getDishes("ca_2");
+//            controller.getDishes("ca_1");
+          //  Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
+            dishController.getDishes("ca_2");
         }
         else if(v.getId() == R.id.fragment_dishes_tab3){
             item3.setTextColor(Color.WHITE);
@@ -125,7 +144,9 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
 
             int size = item2.getWidth() * 2;
             tab.animate().x(size).setDuration(100);
-            getDishes("ca_3");
+           // controller.getDishes("ca_1");
+         //   Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
+            dishController.getDishes("ca_3");
         }
         else{
             item4.setTextColor(Color.WHITE);
@@ -135,103 +156,80 @@ public class DishesFragment extends Fragment implements View.OnClickListener{
 
             int size = item2.getWidth() * 3;
             tab.animate().x(size).setDuration(100);
+           // controller.getDishes("ca_1");
+       //     Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
 
-            getDishes("ca_4");
+            dishController.getDishes("ca_4");
 
         }
+    }
+
+    @Override
+    public void show() {
 
     }
 
-    public void getDishes(String category){
-        dishes = new ArrayList<>();
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.MAGENTA));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.YELLOW));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.BLUE));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.GRAY));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.LTGRAY));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.MAGENTA));
-
-        String url = "https://appfooddb.000webhostapp.com/getDishesByCategory.php";
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response){
-                        try {
-                            JSONArray array = new JSONArray(response);
-                            Log.d("dishes","AAA "+array.length());
-                            for (int i = 0; i < array.length();i++){
-                                try {
-                                    JSONObject object = array.getJSONObject(i);
-
-                                    DishPageModel dishPageModel = new DishPageModel();
-                                    dishPageModel.setId(object.getString("idDish"));
-                                    dishPageModel.setName(object.getString("name"));
-                                    dishPageModel.setPrice(Integer.parseInt(object.getString("price")));
-                                    dishPageModel.setImg(object.getString("linkImage"));
-
-                                    dishes.add(dishPageModel);
-
-                                    recyclerView.setHasFixedSize(true);
-                                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-
-                                    DishesPageApdater adapter = new DishesPageApdater(getActivity(),dishes);
-                                    recyclerView.setAdapter(adapter);
-                                    adapter.notifyDataSetChanged();
-
-                                    for (DishPageModel d : dishes){
-                                        Random rd = new Random();
-                                        int h = rd.nextInt(getCorlors().size());
-                                        d.setBackground(getCorlors().get(h));
-
-                                    }
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("dishes", error.toString());
-                    }
-                }){
-            @Nullable
-            @org.jetbrains.annotations.Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> params = new HashMap<>();
-                params.put("idCategory",category);
-                return params;
-            }
-        };
-        Volley.newRequestQueue(getActivity()).add(jsonArrayRequest);
-
-    }
-    private ArrayList<Integer> getCorlors(){
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(Color.rgb(180,255,218));
-        colors.add(Color.rgb(255,250,180));
-        colors.add(Color.rgb(200,180,255));
-        colors.add(Color.rgb(255,180,190));
-        colors.add(Color.rgb(180,249,255));
-        colors.add(Color.rgb(255,218,180));
-        colors.add(Color.rgb(255,179,255));
-        colors.add(Color.rgb(187,255,179));
-        colors.add(Color.rgb(255,179,226));
-        colors.add(Color.rgb(147,133,255));
-        colors.add(Color.rgb(240,255,162));
-        colors.add(Color.rgb(144,255,251));
-        colors.add(Color.rgb(255,177,144));
-        colors.add(Color.rgb(255,144,252));
-        return colors;
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
     }
 
+    public void setRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+    }
 
+    public ColorStateList getDef() {
+        return def;
+    }
+
+    public void setDef(ColorStateList def) {
+        this.def = def;
+    }
+
+    public TextView getItem1() {
+        return item1;
+    }
+
+    public void setItem1(TextView item1) {
+        this.item1 = item1;
+    }
+
+    public TextView getItem2() {
+        return item2;
+    }
+
+    public void setItem2(TextView item2) {
+        this.item2 = item2;
+    }
+
+    public TextView getItem3() {
+        return item3;
+    }
+
+    public void setItem3(TextView item3) {
+        this.item3 = item3;
+    }
+
+    public TextView getItem4() {
+        return item4;
+    }
+
+    public void setItem4(TextView item4) {
+        this.item4 = item4;
+    }
+
+    public TextView getTab() {
+        return tab;
+    }
+
+    public void setTab(TextView tab) {
+        this.tab = tab;
+    }
+
+    public ArrayList<DishPageModel> getDishes() {
+        return dishes;
+    }
+
+    public void setDishes(ArrayList<DishPageModel> dishes) {
+        this.dishes = dishes;
+    }
 }
