@@ -56,68 +56,6 @@ public class AddDishDAO {
         this.context = context;
     }
 
-
-    public void addDish(String idDish,String nameDish,String describeDish,ArrayList<Integer> price,ArrayList<Image> linkImage, String chooseCategory){
-        Dish dish = new Dish();
-        dish.setId(idDish);
-        dish.setName(nameDish);
-        dish.setDescribe(describeDish);
-        dish.setIdCategory(chooseCategory);
-
-        ArrayList<Price> prices = new ArrayList<>();
-        ArrayList<Size> sizes = new ArrayList<>();
-        // nếu có 2 giá thì sẽ có 2 size
-        if (price.size() == 2){
-
-            sizes.add(new Size("m","nhỏ"));
-            sizes.add(new Size("l","lớn"));
-
-            prices.add(new Price("",price.get(0),null));
-            prices.add(new Price("",price.get(1),null));
-        }
-        // không nhập size nhỏ
-        else if (price.get(0) == -1 && price.get(1) != -1){
-
-            sizes.add(new Size("l","lớn"));
-            prices.add(new Price("",price.get(1),null));
-        }
-        // không nhập size lớn
-        else if (price.get(0) != -1 && price.get(1) == -1){
-
-            sizes.add(new Size("m","nhỏ"));
-            prices.add(new Price("",price.get(0),null));
-        }
-        // không nhập gì cả
-        else {
-           // Toast.makeText(context, "Vui lòng chọn size và giá!", Toast.LENGTH_SHORT).show();
-        }
-
-        dish.setPrice(prices);
-        dish.setSize(sizes);
-
-        // tạo dish lên firebase
-        //createDishToFirebase(dish.getId(),linkImage);
-
-        //upload ảnh online
-
-//        for (Uri uri : linkImage){
-//            uploadImage(uri,idDish);
-//        }
-
-        // lấy ảnh về firebase
-//        ArrayList<Image> images = new ArrayList<>();
-//        for (int i = 0; i < linkFirebase.size();i++){
-//            images.add(new Image("",linkFirebase.get(i),""));
-//        }
-//        dish.setImg(images);
-
-        // sau đó tiến hành thêm món ăn
-//        createDish(dish);
-
-        Log.d("NNN",dish.toString());
-
-        Toast.makeText(context, "Thêm thành công!", Toast.LENGTH_SHORT).show();
-    }
     public void createDish(Dish dish){
         // thêm thông tin cơ bản: tên, mô tả, loại.
         createDishInfoBase(dish);
@@ -167,6 +105,7 @@ public class AddDishDAO {
         };
         Database.getInstance(context).excuteQuery(stringRequest);
     }
+
     public void createDishImage(String idDish,String linkImage){
         String url ="https://appfooddb.000webhostapp.com/createDishImage.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -195,6 +134,7 @@ public class AddDishDAO {
         };
         Database.getInstance(context).excuteQuery(stringRequest);
     }
+
     public void createDishSize(String idDish,String idSize){
         String url ="https://appfooddb.000webhostapp.com/createDishSize.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -223,6 +163,7 @@ public class AddDishDAO {
         };
         Database.getInstance(context).excuteQuery(stringRequest);
     }
+
     public void createDishPrice(String idDish,int price){
         String url ="https://appfooddb.000webhostapp.com/createDishPrice.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -251,6 +192,7 @@ public class AddDishDAO {
         };
         Database.getInstance(context).excuteQuery(stringRequest);
     }
+
     public void uploadImage(Uri link, String idDish){
 
         // Create a storage reference from our app
@@ -294,10 +236,7 @@ public class AddDishDAO {
             }
         });
     }
-    public void createDishToFirebase(String idDish, ArrayList<Uri> linkImage){
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("dish");
-        database.child(idDish).child("linkImage").setValue(linkImage);
-    }
+
     public void getIdDish(){
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("dish");
         database.addValueEventListener(new ValueEventListener() {

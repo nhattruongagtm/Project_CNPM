@@ -32,28 +32,12 @@ public class AddDishController {
         this.addDishModel = addDishModel;
     }
 
-    public void getCategories(){
-        Handler handler = new Handler(){
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                super.handleMessage(msg);
-
-                if (msg.what == 5){
-                    Log.d("WWW","ok");
-                    Bundle bundle = msg.getData();
-
-                }
-            }
-        };
-        addDishModel.setContext(addDishView);
-        addDishModel.setHandler(handler);
-    }
 
     public void addDish(String name, String describe, ArrayList<Size> size, ArrayList<Price> price, ArrayList<Uri> img){
-//        if (name.equals("") || price.size() == 0 || idCategoy.equals("") || describe.equals("") || linkImage.size()==0){
-//            addDishView.showResult("*Vui lòng nhập đủ thông tin!");
-//        }
-//        else{
+        if (name.equals("") || price.size() == 0 || addDishView.getChooseCategory().equals("") || describe.equals("") || img.size()==0){
+            addDishView.showResult("*Vui lòng nhập đủ thông tin!");
+        }
+        else{
             Dish dish = new Dish();
             dish.setId(addDishView.getIdDish());
             dish.setName(name);
@@ -69,7 +53,8 @@ public class AddDishController {
             dish.setImg(images);
 
             addDishModel.createDish(dish);
-//        }
+            addDishView.showResult("Thêm món ăn thành công!");
+        }
     }
     public void getIdDish(){
         Handler handler = new Handler(){
