@@ -49,6 +49,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+
 public class SignUpDAO {
     SignUpActivity context;
 
@@ -56,7 +57,7 @@ public class SignUpDAO {
     public ArrayList<User> acc = new ArrayList<>();
 
     String idCustomer = "";
-    public String result = "";
+    public Handler handler;
 
     public SignUpDAO(SignUpActivity context) {
         this.context = context;
@@ -98,59 +99,7 @@ public class SignUpDAO {
         return false;
     }
 
-    public void checkSignUp(String email, String password) {
-        String url = "https://appfooddb.000webhostapp.com/signUp.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("SSS", response);
-                        writeData(email, password);
-                        acc.add(new User(email,password,1));
-                        accounts.put(email,password);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("SSS", "Lỗi kết nối! Vui lòng thử lại!");
-                    }
-                }) {
-            @Nullable
-            @org.jetbrains.annotations.Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("password", password);
-                return params;
-            }
-        };
-        Database.getInstance(context).excuteQuery(stringRequest);
-    }
-
     public void signUp(String email, String password) {
-
-       // checkSignUp(email,password);
-
-//        SignUpDAO dao = new SignUpDAO(context);
-//
-////        if (DataLocalManager.getUser() != null){
-////            acc.add(DataLocalManager.getUser());
-////        }
-//
-//      //  Log.d("SSS","accountFirebase: "+ context.accountFirebase.toString());
-//        Log.d("SSS","account: "+ acc.toString());
-//        Log.d("SSS","account: "+ DataLocalManager.getUser().toString());
-//
-//        for (User user : dao.acc){
-//            if (email.equals(user.getEmail()) || password.equals(user.getPassword())){
-//                return true;
-//            }
-//            else return false;
-//        }
-        final String[] result = {""};
-
         String url = "https://appfooddb.000webhostapp.com/signUp.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -160,8 +109,15 @@ public class SignUpDAO {
                         writeData(email, password);
                         acc.add(new User(email,password,1));
                         accounts.put(email,password);
-                        result[0] = response;
-                        DataLocalManager.setValid(true);
+
+                        android.os.Message message = new android.os.Message();
+                        if (response.equals("successful")){
+                            message.what = 1;
+                        }
+                        else{
+                            message.what = 2;
+                        }
+                        handler.sendMessage(message);
                     }
                 },
                 new Response.ErrorListener() {
@@ -181,29 +137,69 @@ public class SignUpDAO {
             }
         };
         Database.getInstance(context).excuteQuery(stringRequest);
-
-        waitResult();
-
-//        Log.d("SSS","result"+ DataLocalManager.isValid());
-//        if (result[0].equals("successful")){
-//            return true;
-//        }
-      //  return false;
     }
-    public boolean waitResult(){
-        for (int i = 0;i < 5;i++){
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                break;
-            }
-            if(result!=""){
-                return true;
-            }
-        }
-        return false;
-    }
+
+//    public void signUp(String email, String password) {
+//
+//       // checkSignUp(email,password);
+//
+////        SignUpDAO dao = new SignUpDAO(context);
+////
+//////        if (DataLocalManager.getUser() != null){
+//////            acc.add(DataLocalManager.getUser());
+//////        }
+////
+////      //  Log.d("SSS","accountFirebase: "+ context.accountFirebase.toString());
+////        Log.d("SSS","account: "+ acc.toString());
+////        Log.d("SSS","account: "+ DataLocalManager.getUser().toString());
+////
+////        for (User user : dao.acc){
+////            if (email.equals(user.getEmail()) || password.equals(user.getPassword())){
+////                return true;
+////            }
+////            else return false;
+////        }
+//        final String[] result = {""};
+//
+//        String url = "https://appfooddb.000webhostapp.com/signUp.php";
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Log.d("SSS", response);
+//                        writeData(email, password);
+//                        acc.add(new User(email,password,1));
+//                        accounts.put(email,password);
+//                        result[0] = response;
+//                        DataLocalManager.setValid(true);
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.d("SSS", "Lỗi kết nối! Vui lòng thử lại!");
+//                    }
+//                }) {
+//            @Nullable
+//            @org.jetbrains.annotations.Nullable
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                HashMap<String, String> params = new HashMap<>();
+//                params.put("email", email);
+//                params.put("password", password);
+//                return params;
+//            }
+//        };
+//        Database.getInstance(context).excuteQuery(stringRequest);
+//
+//        waitResult();
+//
+////        Log.d("SSS","result"+ DataLocalManager.isValid());
+////        if (result[0].equals("successful")){
+////            return true;
+////        }
+//      //  return false;
+//    }
 
     public void sendMail1(String emailTo) {
         String sEmail = "appcnpm2021@gmail.com";
@@ -240,7 +236,7 @@ public class SignUpDAO {
 
     public void writeData(String email, String password) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child("account");
+        DatabaseReference myRef = database.getReference().child("account").child(idCustomer);
 
         myRef.child(idCustomer).child("email").setValue(email);
         myRef.child(idCustomer).child("password").setValue(password);
@@ -336,4 +332,19 @@ public class SignUpDAO {
         }
     }
 
+    public SignUpActivity getContext() {
+        return context;
+    }
+
+    public void setContext(SignUpActivity context) {
+        this.context = context;
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
 }

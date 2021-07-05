@@ -1,4 +1,4 @@
-package com.example.project_cnpm.DishesManagement;
+package com.example.project_cnpm.Admin.DishesManagement;
 
 public class Dish {
     private String id;

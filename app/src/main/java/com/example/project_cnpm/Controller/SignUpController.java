@@ -1,11 +1,18 @@
 package com.example.project_cnpm.Controller;
 
 
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.project_cnpm.DAO.SignUpDAO;
+import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.Model.User;
+import com.example.project_cnpm.SignUp.SignUpActivity;
 import com.example.project_cnpm.View.ISignUpView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -15,10 +22,10 @@ import java.security.NoSuchAlgorithmException;
 import static java.lang.Thread.sleep;
 
 public class SignUpController implements ISignUpController{
-     ISignUpView signUpView;
+     SignUpActivity signUpView;
      SignUpDAO signUpModel;
 
-    public SignUpController(ISignUpView signUpView, SignUpDAO signUpModel) {
+    public SignUpController(SignUpActivity signUpView, SignUpDAO signUpModel) {
         this.signUpView = signUpView;
         this.signUpModel = signUpModel;
     }
@@ -54,11 +61,26 @@ public class SignUpController implements ISignUpController{
                 try {
                     MD5 md5 = new MD5();
                     String pass = md5.enryptPassword(password);
+
+                       Handler handler = new Handler(){
+                           @Override
+                           public void handleMessage(@NonNull Message msg) {
+                               super.handleMessage(msg);
+                               if (msg.what == 1){
+                                   signUpView.showSignUpSuccess("Đăng ký thành công!");
+                                   signUpModel.sendMail(email);
+
+                                   Intent intent = new Intent(signUpView,LoginActivity.class);
+                                   intent.putExtra("email_signup",email);
+                                   signUpView.startActivity(intent);
+                               }
+                               else{
+                                   signUpView.showSignUpFail("Lỗi kết nối! Vui lòng kiểm tra lại!");
+                               }
+                           }
+                       };
                        signUpModel.signUp(email,pass);
-                       signUpView.showSignUpSuccess("Đăng ký thành công!");
-//                        else{
-//                            signUpView.showSignUpFail("*Lỗi kết nối!");
-//                        }
+                       signUpModel.setHandler(handler);
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }

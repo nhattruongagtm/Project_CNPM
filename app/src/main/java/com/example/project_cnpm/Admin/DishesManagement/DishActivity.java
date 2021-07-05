@@ -1,9 +1,8 @@
-package com.example.project_cnpm.DishesManagement;
+package com.example.project_cnpm.Admin.DishesManagement;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -12,23 +11,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Admin.AdminPage;
 import com.example.project_cnpm.Database.Database;
 import com.example.project_cnpm.R;
-import com.example.project_cnpm.Model.Dish;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +28,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class DishActivity extends AppCompatActivity {
 
@@ -45,9 +36,10 @@ public class DishActivity extends AppCompatActivity {
     ImageView btnHome;
     TextView txtHome;
     ListView lvDish;
-    ArrayList<com.example.project_cnpm.DishesManagement.Dish> arrayDishes;
+    ArrayList<com.example.project_cnpm.Admin.DishesManagement.Dish> arrayDishes;
     DishAdapter adapter;
     Button btnAdd;
+    HashMap<String,String> categories = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +61,46 @@ public class DishActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(DishActivity.this, AddDishActivity.class));
+                // lấy danh mục
+                String url = "https://appfooddb.000webhostapp.com/getCategories.php";
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONArray array = new JSONArray(response);
+                                    for (int i = 0; i< array.length();i++){
+
+                                        JSONObject object = array.getJSONObject(i);
+                                        String id = object.getString("idCategory");
+                                        String name = object.getString("name");
+
+                                        categories.put(id,name);
+
+                                        //                       categories.put(id,name);
+//                                spin.add(name);
+                                    }
+                                    Intent intent = new Intent(DishActivity.this,AddDishActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("categories",categories);
+                                    intent.putExtra("categories",bundle);
+                                    startActivity(intent);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // Toast.makeText(context, "Loi load danh muc!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                Database.getInstance(DishActivity.this).excuteQuery(stringRequest);
+
+               // startActivity(new Intent(DishActivity.this, AddDishActivity.class));
             }
         });
         btnMenuAdmin.setOnClickListener(new View.OnClickListener() {

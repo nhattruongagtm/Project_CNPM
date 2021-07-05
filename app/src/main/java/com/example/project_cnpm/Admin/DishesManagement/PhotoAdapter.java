@@ -1,4 +1,4 @@
-package com.example.project_cnpm.DishesManagement;
+package com.example.project_cnpm.Admin.DishesManagement;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_cnpm.R;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>{

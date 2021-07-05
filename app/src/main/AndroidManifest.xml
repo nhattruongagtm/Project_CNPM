@@ -21,14 +21,14 @@
         <activity android:name=".Admin.LoginAdminActivity"></activity>
         <activity android:name=".DishesPage.DetailDishActivity" />
         <activity android:name=".TestVolleyActivity" />
-        <activity android:name=".DishesManagement.DishActivity">
+        <activity android:name=".Admin.DishesManagement.DishActivity">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
-        <activity android:name=".DishesManagement.AddDishActivity"/>
+        <activity android:name=".Admin.DishesManagement.AddDishActivity"/>
         <activity android:name=".FlashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

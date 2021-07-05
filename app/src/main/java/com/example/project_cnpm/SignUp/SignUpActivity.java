@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignUpActivity extends AppCompatActivity implements ISignUpView {
+public class SignUpActivity extends AppCompatActivity{
     TextView btnChangeLogin;
     LinearLayout btnBack;
 
@@ -99,15 +99,7 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
                 }
                 else{
                     signUpController.signup(mail,pass);
-                   // new SignUpDAO(SignUpActivity.this).sendMail(mail);
-                    Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
-                    intent.putExtra("email_signup",mail);
-                    intent.putExtra("notify","Đăng ký thành công!");
-                    startActivity(intent);
                 }
-//                else{
-//                    showSignUpFail("*Lỗi kết nối! vui lòng thử lại!");
-//                }
             }
         });
     }
@@ -164,13 +156,11 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
         requestQueue.add(stringRequest);
     }
 
-    @Override
     public void showSignUpFail(String message) {
         notify.setText(message);
         notify.setTextColor(Color.RED);
     }
 
-    @Override
     public void showSignUpSuccess(String message) {
         notify.setText(message);
         notify.setTextColor(Color.GREEN);

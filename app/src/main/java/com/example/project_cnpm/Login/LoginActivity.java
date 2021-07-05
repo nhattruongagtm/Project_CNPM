@@ -149,7 +149,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             email.setText(intent.getStringExtra("email_signup"));
             password.setText("");
             btnSave.setChecked(false);
-            Toast.makeText(this, intent.getStringExtra("notify"), Toast.LENGTH_SHORT).show();
         }
 
 

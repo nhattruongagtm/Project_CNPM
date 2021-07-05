@@ -5,15 +5,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.example.project_cnpm.DishesManagement.DishActivity;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.example.project_cnpm.Admin.DishesManagement.DishActivity;
+import com.example.project_cnpm.Database.Database;
 import com.example.project_cnpm.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class AdminPage extends AppCompatActivity {
     Button btnQLMA;
@@ -72,4 +85,5 @@ public class AdminPage extends AppCompatActivity {
         window.setAttributes(param);
         window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
+
 }
