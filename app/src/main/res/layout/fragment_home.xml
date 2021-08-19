@@ -12,7 +12,7 @@
     android:orientation="vertical">
     <fragment
         android:id="@+id/header_homepage"
-        android:name="com.example.project_cnpm.HeaderFragment"
+        android:name="com.example.project_cnpm.HomePage.HeaderFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 <!--    <LinearLayout-->

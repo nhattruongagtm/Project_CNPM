@@ -13,9 +13,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Database.Database;
-import com.example.project_cnpm.DishesPage.DetailDishActivity;
+import com.example.project_cnpm.DishesPage.DishDetailView;
 import com.example.project_cnpm.Model.DateTime;
 import com.example.project_cnpm.Model.Dish;
 import com.example.project_cnpm.Model.Image;
@@ -29,14 +28,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class DishDetailDAO {
-    private DetailDishActivity context;
+    private DishDetailView context;
     public Handler handler;
     public Dish dish;
 
@@ -44,7 +42,7 @@ public class DishDetailDAO {
 
     }
 
-    public DishDetailDAO(DetailDishActivity context) {
+    public DishDetailDAO(DishDetailView context) {
         this.context = context;
     }
 
@@ -166,11 +164,11 @@ public class DishDetailDAO {
         this.handler = handler;
     }
 
-    public DetailDishActivity getContext() {
+    public DishDetailView getContext() {
         return context;
     }
 
-    public void setContext(DetailDishActivity context) {
+    public void setContext(DishDetailView context) {
         this.context = context;
     }
 

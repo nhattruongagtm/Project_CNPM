@@ -4,23 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
-import com.example.project_cnpm.DishesPage.DishesFragment;
+import com.example.project_cnpm.DishesPage.DishesView;
 import com.example.project_cnpm.HomePage.HomeFragment;
-import com.example.project_cnpm.HomePage.NotificationFragment;
 import com.example.project_cnpm.HomePage.UserFragment;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
@@ -30,14 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -98,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = null;
 
                 switch (item.getId()){
-                    case 2: fragment = new DishesFragment();
+                    case 2: fragment = new DishesView();
                     break;
                     case 1: fragment = new HomeFragment();
                     break;

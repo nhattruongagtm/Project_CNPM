@@ -7,26 +7,20 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.bumptech.glide.Glide;
 import com.example.project_cnpm.DAO.DishDetailDAO;
-import com.example.project_cnpm.DishesPage.DetailDishActivity;
+import com.example.project_cnpm.DishesPage.DishDetailView;
 import com.example.project_cnpm.Model.Dish;
-import com.example.project_cnpm.Model.DishDetail;
 
 
-public class DetailDishController {
+public class DishDetailController {
 
 
-    private DetailDishActivity view;
+    private DishDetailView view;
 
     private DishDetailDAO model;
 
-    public DetailDishController(DetailDishActivity view, DishDetailDAO model) {
+    public DishDetailController(DishDetailView view, DishDetailDAO model) {
         this.view = view;
-        this.model = model;
-    }
-
-    public DetailDishController(DishDetailDAO model) {
         this.model = model;
     }
 
@@ -43,11 +37,8 @@ public class DetailDishController {
                     Bundle bundle = msg.getData();
                     Dish dish = (Dish) bundle.getSerializable("dish");
                     Log.d("QQQ", "yes" + dish.toString());
-                    view.getName().setText(dish.getName());
-                    view.getDes().setText(dish.getDescribe());
-                    view.getPrice().setText(dish.getPrice().get(0).getPrice() + " VNĐ");
-                    Glide.with(view).load(dish.getImg().get(0).getLinkImage()).into(view.getImg());
-                    view.getNumberImg().setText(dish.getImg().size()+"");
+
+                    view.showDish(dish);
                 }
             }
         };

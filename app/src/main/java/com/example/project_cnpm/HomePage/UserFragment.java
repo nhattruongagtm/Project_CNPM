@@ -10,8 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.project_cnpm.Login.LoginActivity;
-import com.example.project_cnpm.MainActivity;
+import com.example.project_cnpm.Login.LoginView;
 import com.example.project_cnpm.R;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
@@ -40,7 +39,7 @@ public class UserFragment extends Fragment {
         Customer account = DataLocalManager.getAccount();
         if (account == null){
           //  fragment = new LoginFragment();
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            startActivity(new Intent(getActivity(), LoginView.class));
         }
         else{
             Log.d("SSSS",account.toString());

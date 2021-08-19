@@ -1,51 +1,36 @@
 package com.example.project_cnpm.DAO;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Database.Database;
-import com.example.project_cnpm.Login.LoginActivity;
-import com.example.project_cnpm.MD5.MD5;
+import com.example.project_cnpm.Login.LoginView;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.Model.User;
-import com.example.project_cnpm.R;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
-import com.example.project_cnpm.SharedReferences.MyApplication;
-import com.google.gson.JsonArray;
 //import com.google.firebase.database.DataSnapshot;
 //import com.google.firebase.database.DatabaseError;
 //import com.google.firebase.database.DatabaseReference;
 //import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginDAO {
-    private LoginActivity context;
+    private LoginView context;
 
-    public LoginDAO(LoginActivity context) {
+    public LoginDAO(LoginView context) {
         this.context = context;
     }
 

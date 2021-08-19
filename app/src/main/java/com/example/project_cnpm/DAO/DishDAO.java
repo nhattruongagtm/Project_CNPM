@@ -1,6 +1,5 @@
 package com.example.project_cnpm.DAO;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,22 +7,15 @@ import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Database.Database;
-import com.example.project_cnpm.DishesPage.DishPageModel;
-import com.example.project_cnpm.DishesPage.DishesFragment;
-import com.example.project_cnpm.DishesPage.DishesPageApdater;
-import com.example.project_cnpm.MainActivity;
-import com.example.project_cnpm.Model.Dish;
+import com.example.project_cnpm.DishesPage.DishItem;
+import com.example.project_cnpm.DishesPage.DishesView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,22 +27,16 @@ import java.util.Map;
 import java.util.Random;
 
 public class DishDAO {
-    DishesFragment context;
+    DishesView context;
     public Handler handler;
-    public ArrayList<DishPageModel> dishes = new ArrayList<>();
+    public ArrayList<DishItem> dishes = new ArrayList<>();
 
-    public DishDAO(DishesFragment context) {
+    public DishDAO(DishesView context) {
         this.context = context;
     }
 
-    public void getDishes(String category){
-     //   ArrayList<DishPageModel> dishes = context.dishes;
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.MAGENTA));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.YELLOW));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.BLUE));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.GRAY));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.LTGRAY));
-//        dishes.add(new DishPageModel("001","Pizza hải sản cao cấp",199000,R.drawable.item_dishes, Color.MAGENTA));
+    public void getDishes(String idCategory){
+
         String url = "https://appfooddb.000webhostapp.com/getDishesByCategory.php";
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -63,7 +49,7 @@ public class DishDAO {
                                 try {
                                     JSONObject object = array.getJSONObject(i);
 
-                                    DishPageModel dishPageModel = new DishPageModel();
+                                    DishItem dishPageModel = new DishItem();
                                     dishPageModel.setId(object.getString("idDish"));
                                     dishPageModel.setName(object.getString("name"));
                                     dishPageModel.setPrice(Integer.parseInt(object.getString("price")));
@@ -71,7 +57,7 @@ public class DishDAO {
 
                                     dishes.add(dishPageModel);
 
-                                    for (DishPageModel d : dishes){
+                                    for (DishItem d : dishes){
                                         Random rd = new Random();
                                         int h = rd.nextInt(getCorlors().size());
                                         d.setBackground(getCorlors().get(h));
@@ -110,7 +96,7 @@ public class DishDAO {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> params = new HashMap<>();
-                params.put("idCategory",category);
+                params.put("idCategory",idCategory);
                 return params;
             }
         };
@@ -139,11 +125,11 @@ public class DishDAO {
         return colors;
     }
 
-    public DishesFragment getContext() {
+    public DishesView getContext() {
         return context;
     }
 
-    public void setContext(DishesFragment context) {
+    public void setContext(DishesView context) {
         this.context = context;
     }
     public Handler getHandler() {
@@ -154,11 +140,5 @@ public class DishDAO {
         this.handler = handler;
     }
 
-    public ArrayList<DishPageModel> getDishes() {
-        return dishes;
-    }
 
-    public void setDishes(ArrayList<DishPageModel> dishes) {
-        this.dishes = dishes;
-    }
 }

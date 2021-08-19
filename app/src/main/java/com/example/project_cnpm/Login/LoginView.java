@@ -1,72 +1,65 @@
-package com.example.project_cnpm.Login;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+    package com.example.project_cnpm.Login;
 
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+    import androidx.annotation.Nullable;
+    import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.project_cnpm.Controller.ILoginController;
-import com.example.project_cnpm.Controller.LoginController;
-import com.example.project_cnpm.DAO.LoginDAO;
-import com.example.project_cnpm.MainActivity;
-import com.example.project_cnpm.Model.Customer;
-import com.example.project_cnpm.Model.User;
-import com.example.project_cnpm.R;
-import com.example.project_cnpm.SharedReferences.DataLocalManager;
-import com.example.project_cnpm.SignUp.SignUpActivity;
+    import android.content.Intent;
+    import android.graphics.Color;
+    import android.os.Bundle;
+    import android.util.Log;
+    import android.view.View;
+    import android.widget.Button;
+    import android.widget.CheckBox;
+    import android.widget.CompoundButton;
+    import android.widget.EditText;
+    import android.widget.LinearLayout;
+    import android.widget.TextView;
+    import android.widget.Toast;
 
-import com.example.project_cnpm.View.ILoginView;
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
+    import com.android.volley.AuthFailureError;
+    import com.android.volley.Request;
+    import com.android.volley.RequestQueue;
+    import com.android.volley.Response;
+    import com.android.volley.VolleyError;
+    import com.android.volley.toolbox.JsonArrayRequest;
+    import com.android.volley.toolbox.StringRequest;
+    import com.android.volley.toolbox.Volley;
+    import com.example.project_cnpm.Controller.ILoginController;
+    import com.example.project_cnpm.Controller.LoginController;
+    import com.example.project_cnpm.DAO.LoginDAO;
+    import com.example.project_cnpm.MainActivity;
+    import com.example.project_cnpm.Model.Customer;
+    import com.example.project_cnpm.Model.User;
+    import com.example.project_cnpm.R;
+    import com.example.project_cnpm.SharedReferences.DataLocalManager;
+    import com.example.project_cnpm.SignUp.SignUpActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+    import com.example.project_cnpm.View.ILoginView;
+    import com.facebook.AccessToken;
+    import com.facebook.CallbackManager;
+    import com.facebook.FacebookCallback;
+    import com.facebook.FacebookException;
+    import com.facebook.GraphRequest;
+    import com.facebook.GraphResponse;
+    import com.facebook.login.LoginResult;
+    import com.facebook.login.widget.LoginButton;
+    import com.google.android.gms.auth.api.signin.GoogleSignIn;
+    import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+    import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+    import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+    import com.google.android.gms.common.SignInButton;
+    import com.google.android.gms.common.api.ApiException;
+    import com.google.android.gms.tasks.Task;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
+    import org.json.JSONArray;
+    import org.json.JSONException;
+    import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity implements ILoginView {
+    import java.util.HashMap;
+    import java.util.Map;
+
+public class LoginView extends AppCompatActivity implements ILoginView {
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -105,13 +98,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         btnChangeSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                startActivity(new Intent(LoginView.this, SignUpActivity.class));
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginView.this, MainActivity.class));
             }
         });
         btnSave.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -121,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             }
         });
         if(notify.getText().toString().equals("*Đăng nhập thành công!")){
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            startActivity(new Intent(LoginView.this,MainActivity.class));
             finish();
         }
 
@@ -249,7 +242,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
                             //create Account
                             String url = "https://appfooddb.000webhostapp.com/checkAccountAPIUser.php";
-                            RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+                            RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                                     new Response.Listener<String>() {
                                         @Override
@@ -262,7 +255,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LoginView.this, error.toString(), Toast.LENGTH_SHORT).show();
                                         }
                                     }){
                                 @Nullable
@@ -277,7 +270,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                             requestQueue.add(stringRequest);
 
                             if (DataLocalManager.getAccount()!= null){
-                                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                                startActivity(new Intent(LoginView.this,MainActivity.class));
                             }
                             Log.d("AAA", user.toString());
 
@@ -297,7 +290,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 //                }
 
                 Log.d("AAA","Login successful!");
-              //  Log.d("AAA",account.getName());
+                //  Log.d("AAA",account.getName());
             }
 
             @Override
@@ -318,21 +311,18 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    String mail = email.getText().toString().trim();
-                    String pass = password.getText().toString().trim();
+                String mail = email.getText().toString().trim();
+                String pass = password.getText().toString().trim();
 
-                    if(loginController.login(mail,pass)){
-                         if (saveInput){
-                                DataLocalManager.setSaveAccount(email.getText().toString(),password.getText().toString());
-                         }
-                        else{
-                            DataLocalManager.setSaveAccount(null,null);
-                        }
-                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                if(loginController.login(mail,pass)){
+                    if (saveInput){
+                        DataLocalManager.setSaveAccount(email.getText().toString(),password.getText().toString());
                     }
-
-
-
+                    else{
+                        DataLocalManager.setSaveAccount(null,null);
+                    }
+                    startActivity(new Intent(LoginView.this,MainActivity.class));
+                }
 
             }
         });
@@ -353,7 +343,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode,data);
         super.onActivityResult(requestCode, resultCode, data);
-         //facebook
+        //facebook
 //        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
 //            @Override
 //            public void onCompleted(JSONObject object, GraphResponse response) {
@@ -384,7 +374,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             handleSignInResult(task);
         }
     }
-//    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+    //    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
 //        @Override
 //        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
 //            if(currentAccessToken == null){
@@ -395,7 +385,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-      //  accessTokenTracker.startTracking();
+        //  accessTokenTracker.startTracking();
     }
     public void loginGoogle(){
         signInButton = findViewById(R.id.sign_in_button);
@@ -427,7 +417,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             user.setEmail(account.getEmail());
             Customer customer = new Customer();
             customer.setUser(user);
-            Log.d("ZZZ", account.getId());
+            Log.d("ZZZ", customer+"-------aaaaa");
             customer.setIdCustomer(account.getId());
             customer.setName(account.getDisplayName());
             customer.setAvatar(account.getPhotoUrl()+"");
@@ -437,7 +427,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
             //createAccount
             String url = "https://appfooddb.000webhostapp.com/checkAccountAPIUser.php";
-            RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+            RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -452,7 +442,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginView.this, error.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }){
                 @Nullable
@@ -476,7 +466,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
     public void createAccount(String idCustomer, String name, String img){
         String url = "https://appfooddb.000webhostapp.com/createAccountForAPIUser.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -507,13 +497,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
     public void checkIdCustomer(String id){
         String url = "";
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                            if(response.trim().equals("false")){
-                            }
+                        if(response.trim().equals("false")){
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -544,7 +534,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginView.this, error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
         requestQueue.add(stringRequest);

@@ -1,65 +1,41 @@
 package com.example.project_cnpm.DishesPage;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
-import com.example.project_cnpm.Controller.DetailDishController;
+import com.example.project_cnpm.Controller.DishDetailController;
 import com.example.project_cnpm.DAO.DishDetailDAO;
-import com.example.project_cnpm.Database.Database;
-import com.example.project_cnpm.Model.DateTime;
 import com.example.project_cnpm.Model.Dish;
-import com.example.project_cnpm.Model.Image;
-import com.example.project_cnpm.Model.Price;
-import com.example.project_cnpm.Model.PriceSale;
-import com.example.project_cnpm.Model.Size;
 import com.example.project_cnpm.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
-public class DetailDishActivity extends AppCompatActivity {
+public class DishDetailView extends AppCompatActivity {
     ImageView btnBack;
     FrameLayout background;
-    TextView name,des,price,number,numberImg;
+    TextView name,des,price,number,numberImg,priceSale;
     ImageView img;
     CardView btnPlus,btnSub;
     public Dish dish = new Dish();
     public Handler handler;
+    private LinearLayout sizes;
+    private TextView nameSize;
+    private CardView sizeItem;
+
 
     public Dish getDish() {
         return dish;
@@ -76,7 +52,7 @@ public class DetailDishActivity extends AppCompatActivity {
 
         mapping();
 
-        DetailDishController controller = new DetailDishController(this,new DishDetailDAO(this));
+        DishDetailController controller = new DishDetailController(this,new DishDetailDAO(this));
 
         Intent intent = getIntent();
 
@@ -130,8 +106,11 @@ public class DetailDishActivity extends AppCompatActivity {
         name = findViewById(R.id.activity_detail_name);
         des = findViewById(R.id.activity_detail_des);
         price = findViewById(R.id.activity_detail_price);
+        priceSale = findViewById(R.id.activity_detail_price_sale);
         img = findViewById(R.id.activity_detail_img);
         numberImg = findViewById(R.id.activity_detail_number_img);
+        sizes = findViewById(R.id.activity_dish_detail_sizes);
+
 
     }
 
@@ -221,5 +200,69 @@ public class DetailDishActivity extends AppCompatActivity {
 
     public void setHandler(Handler handler) {
         this.handler = handler;
+    }
+
+    public void showDish(Dish dish){
+        name.setText(dish.getName());
+        des.setText(dish.getDescribe());
+
+        ArrayList<Integer> prices = new ArrayList<>();
+        ArrayList<String> nameSizes = new ArrayList<>();
+
+        for(int i = 0; i < dish.getPriceSale().size();i++){
+            int priceDish = 0;
+            int percent = dish.getPriceSale().get(i).getPriceSale();
+            int pr = dish.getPrice().get(i).getPrice();
+            if(percent > 0){
+                priceDish = pr - (pr * percent/100);
+            }
+            else {
+                priceDish = pr;
+            }
+            prices.add(priceDish);
+            nameSizes.add(dish.getSize().get(dish.getPriceSale().size()-i-1).getIdSize().toUpperCase());
+        }
+
+
+        for (int i = 0; i < dish.getPrice().size();i++){
+
+            LinearLayout itemView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.activity_detail_dish_size_item,null);
+
+            nameSize = itemView.findViewById(R.id.activity_dish_detail_name_size);
+            sizes.addView(itemView);
+            nameSize.setText(nameSizes.get(i)+"");
+            nameSize.setTextColor(Color.WHITE);
+
+            LinearLayout itemSize = (LinearLayout) sizes.getChildAt(0);
+            CardView size = itemSize.findViewById(R.id.activity_detail_item);
+            size.setCardBackgroundColor(Color.parseColor("#FFC107"));
+
+            int p = prices.get(i);
+            int pos = i;
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                   price.setText(p +" VNĐ");
+                   for(int i = 0; i < nameSizes.size();i++){
+                       LinearLayout itemSize = (LinearLayout) sizes.getChildAt(i);
+                       if(i == pos){
+                           CardView size = itemSize.findViewById(R.id.activity_detail_item);
+                           size.setCardBackgroundColor(Color.parseColor("#FFC107"));
+                       }
+                       else{
+                           CardView size = itemSize.findViewById(R.id.activity_detail_item);
+                           size.setCardBackgroundColor(Color.parseColor("#FFF5D7"));
+                       }
+                    }
+
+                }
+            });
+        }
+        price.setText(prices.get(0)+" VNĐ");
+
+        numberImg.setText(dish.getImg().size()+"");
+        Glide.with(this).load(dish.getImg().get(0).getLinkImage()).into(img);
     }
 }

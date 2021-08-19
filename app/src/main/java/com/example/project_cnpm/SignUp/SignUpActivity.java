@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,12 +22,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Controller.SignUpController;
 import com.example.project_cnpm.DAO.SignUpDAO;
-import com.example.project_cnpm.Login.LoginActivity;
+import com.example.project_cnpm.Login.LoginView;
 import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.R;
-import com.example.project_cnpm.View.ISignUpView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,7 +39,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity{
     TextView btnChangeLogin;
@@ -72,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity{
         btnChangeLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                startActivity(new Intent(SignUpActivity.this, LoginView.class));
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {

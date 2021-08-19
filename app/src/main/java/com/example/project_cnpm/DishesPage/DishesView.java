@@ -46,24 +46,18 @@ import java.util.Map;
 import java.util.Random;
 
 
-public class DishesFragment extends Fragment implements View.OnClickListener, DishView {
+public class DishesView extends Fragment implements View.OnClickListener, DishView {
     RecyclerView recyclerView;
 
     ColorStateList def;
     TextView item1, item2, item3, item4, tab;
 
-    ArrayList<DishPageModel> dishes = new ArrayList<>();
-
     DishController dishController = new DishController(new DishDAO(this),this);
 
-   // DishController controller = new DishController(new DishDAO(this,recyclerView),this);
 
+    public DishesView() {
 
-
-    public DishesFragment() {
-        // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,14 +68,11 @@ public class DishesFragment extends Fragment implements View.OnClickListener, Di
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view =  inflater.inflate(R.layout.fragment_dishes, container, false);
 
 
-
-
         dishController.getDishes("ca_1");
-       // Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
 
         recyclerView = view.findViewById(R.id.recyler_dishes_page);
 
@@ -120,9 +111,7 @@ public class DishesFragment extends Fragment implements View.OnClickListener, Di
             item3.setTextColor(def);
             item4.setTextColor(def);
 
-//            controller.getDishes("ca_1");
-        //    Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
-           dishController.getDishes("ca_1");
+            dishController.getDishes("ca_1");
         }
         else if(v.getId() == R.id.fragment_dishes_tab2){
             item2.setTextColor(Color.WHITE);
@@ -132,8 +121,7 @@ public class DishesFragment extends Fragment implements View.OnClickListener, Di
 
             int size = item2.getWidth();
             tab.animate().x(size).setDuration(100);
-//            controller.getDishes("ca_1");
-          //  Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
+
             dishController.getDishes("ca_2");
         }
         else if(v.getId() == R.id.fragment_dishes_tab3){
@@ -144,8 +132,7 @@ public class DishesFragment extends Fragment implements View.OnClickListener, Di
 
             int size = item2.getWidth() * 2;
             tab.animate().x(size).setDuration(100);
-           // controller.getDishes("ca_1");
-         //   Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
+
             dishController.getDishes("ca_3");
         }
         else{
@@ -156,8 +143,6 @@ public class DishesFragment extends Fragment implements View.OnClickListener, Di
 
             int size = item2.getWidth() * 3;
             tab.animate().x(size).setDuration(100);
-           // controller.getDishes("ca_1");
-       //     Log.d("SSS",new DishDAO(this,recyclerView).dishes.toString());
 
             dishController.getDishes("ca_4");
 
@@ -177,59 +162,8 @@ public class DishesFragment extends Fragment implements View.OnClickListener, Di
         this.recyclerView = recyclerView;
     }
 
-    public ColorStateList getDef() {
-        return def;
+    public RecyclerView showDishes(){
+        return recyclerView;
     }
 
-    public void setDef(ColorStateList def) {
-        this.def = def;
-    }
-
-    public TextView getItem1() {
-        return item1;
-    }
-
-    public void setItem1(TextView item1) {
-        this.item1 = item1;
-    }
-
-    public TextView getItem2() {
-        return item2;
-    }
-
-    public void setItem2(TextView item2) {
-        this.item2 = item2;
-    }
-
-    public TextView getItem3() {
-        return item3;
-    }
-
-    public void setItem3(TextView item3) {
-        this.item3 = item3;
-    }
-
-    public TextView getItem4() {
-        return item4;
-    }
-
-    public void setItem4(TextView item4) {
-        this.item4 = item4;
-    }
-
-    public TextView getTab() {
-        return tab;
-    }
-
-    public void setTab(TextView tab) {
-        this.tab = tab;
-    }
-
-    public ArrayList<DishPageModel> getDishes() {
-        return dishes;
-    }
-
-    public void setDishes(ArrayList<DishPageModel> dishes) {
-        this.dishes = dishes;
-    }
 }

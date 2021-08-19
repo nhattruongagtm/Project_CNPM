@@ -72,7 +72,13 @@ public class AddDishDAO {
 
         // thêm giá
         for (Price p : dish.getPrice()){
-            createDishPrice(dish.getId(),p.getPrice());
+            try{
+                createDishPrice(dish.getId(),p.getPrice());
+                Thread.sleep(1000);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
         Log.d("WWW",dish.toString());
 

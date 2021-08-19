@@ -4,18 +4,14 @@ package com.example.project_cnpm.Controller;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.project_cnpm.DAO.SignUpDAO;
-import com.example.project_cnpm.Login.LoginActivity;
+import com.example.project_cnpm.Login.LoginView;
 import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.SignUp.SignUpActivity;
-import com.example.project_cnpm.View.ISignUpView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -70,7 +66,7 @@ public class SignUpController implements ISignUpController{
                                    signUpView.showSignUpSuccess("Đăng ký thành công!");
                                    signUpModel.sendMail(email);
 
-                                   Intent intent = new Intent(signUpView,LoginActivity.class);
+                                   Intent intent = new Intent(signUpView, LoginView.class);
                                    intent.putExtra("email_signup",email);
                                    signUpView.startActivity(intent);
                                }

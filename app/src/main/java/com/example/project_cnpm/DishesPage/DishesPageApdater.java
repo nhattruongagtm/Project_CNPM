@@ -1,10 +1,7 @@
 package com.example.project_cnpm.DishesPage;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.project_cnpm.HomePage.Dish;
 import com.example.project_cnpm.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,9 +23,9 @@ import java.util.ArrayList;
 
 public class DishesPageApdater extends RecyclerView.Adapter<DishesPageApdater.DishesPageHolder>{
     private Context context;
-    private ArrayList<DishPageModel> dishes = new ArrayList<>();
+    private ArrayList<DishItem> dishes = new ArrayList<>();
 
-    public DishesPageApdater(Context context, ArrayList<DishPageModel> dishes) {
+    public DishesPageApdater(Context context, ArrayList<DishItem> dishes) {
         this.context = context;
         this.dishes = dishes;
     }
@@ -45,7 +41,7 @@ public class DishesPageApdater extends RecyclerView.Adapter<DishesPageApdater.Di
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull DishesPageHolder holder, int position) {
-        DishPageModel dish = dishes.get(position);
+        DishItem dish = dishes.get(position);
         if (dish == null){
             return;
         }
@@ -61,7 +57,7 @@ public class DishesPageApdater extends RecyclerView.Adapter<DishesPageApdater.Di
             @Override
             public void onClick(View v) {
                 Log.d("aaa",position+"");
-                Intent intent = new Intent(context,DetailDishActivity.class);
+                Intent intent = new Intent(context, DishDetailView.class);
 
                 intent.putExtra("idDish",dish.getId());
                 intent.putExtra("name",dish.getName());

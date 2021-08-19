@@ -8,26 +8,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.project_cnpm.DAO.DishDAO;
-import com.example.project_cnpm.DishesPage.DishPageModel;
-import com.example.project_cnpm.DishesPage.DishesFragment;
+import com.example.project_cnpm.DishesPage.DishItem;
+import com.example.project_cnpm.DishesPage.DishesView;
 import com.example.project_cnpm.DishesPage.DishesPageApdater;
-import com.example.project_cnpm.Model.Dish;
-import com.example.project_cnpm.Model.DishView;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class DishController {
     private DishDAO dishModel;
-    private DishesFragment dishView;
+    private DishesView dishView;
 
-    public DishController(DishDAO dishModel, DishesFragment dishView) {
+    public DishController(DishDAO dishModel, DishesView dishView) {
         this.dishModel = dishModel;
         this.dishView = dishView;
     }
 
-    public void getDishes(String id){
+    public void getDishes(String idCategory){
 
         Handler handler = new Handler(){
             @Override
@@ -36,13 +33,13 @@ public class DishController {
 
                 if (msg.what == 25){
                     Bundle bundle = msg.getData();
-                    ArrayList<DishPageModel> dishes = (ArrayList<DishPageModel>) bundle.getSerializable("dishes");
+                    ArrayList<DishItem> dishes = (ArrayList<DishItem>) bundle.getSerializable("dishes");
 
-                    dishView.getRecyclerView().setHasFixedSize(true);
-                    dishView.getRecyclerView().setLayoutManager(new GridLayoutManager(dishView.getContext(), 2));
+                    dishView.showDishes().setHasFixedSize(true);
+                    dishView.showDishes().setLayoutManager(new GridLayoutManager(dishView.getContext(), 2));
 
                     DishesPageApdater adapter = new DishesPageApdater(dishView.getContext(),dishes);
-                    dishView.getRecyclerView().setAdapter(adapter);
+                    dishView.showDishes().setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
                 }
@@ -50,6 +47,6 @@ public class DishController {
         };
         dishModel.setHandler(handler);
         dishModel.setContext(dishView);
-        dishModel.getDishes(id);
+        dishModel.getDishes(idCategory);
     }
 }

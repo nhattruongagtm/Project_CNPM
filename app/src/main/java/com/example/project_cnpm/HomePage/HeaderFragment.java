@@ -1,4 +1,4 @@
-package com.example.project_cnpm;
+package com.example.project_cnpm.HomePage;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.project_cnpm.Admin.LoginAdminActivity;
 import com.example.project_cnpm.Model.Customer;
+import com.example.project_cnpm.R;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

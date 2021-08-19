@@ -2,22 +2,14 @@ package com.example.project_cnpm.DishesPage;
 
 import java.io.Serializable;
 
-public class DishPageModel implements Serializable {
+public class DishItem implements Serializable {
     private String id;
     private String name;
     private int price;
     private String img;
     private int background;
 
-
-    public DishPageModel(String id, String name, int price, String img, int background) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.img = img;
-        this.background = background;
-    }
-    public DishPageModel(){
+    public DishItem(){
 
     }
 
