@@ -60,6 +60,7 @@ public class AddDishDAO {
         // thêm thông tin cơ bản: tên, mô tả, loại.
         createDishInfoBase(dish);
 
+
         // thêm danh sách ảnh
          for (Image m : dish.getImg()){
              uploadImage(Uri.parse(m.getLinkImage()),dish.getId());
