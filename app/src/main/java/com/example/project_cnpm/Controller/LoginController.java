@@ -31,16 +31,26 @@ public class LoginController implements ILoginController {
             loginView.showLoginFail("*Vui lòng nhập password!");
             return false;
 
-        } else {
+        } else if (loginCode == 3) {
+            loginView.showLoginFail("*Mật khẩu phải tối thiểu 8 ký tự!");
+            return false;
+        }
+        else {
             MD5 md5 = new MD5();
             try {
                 String pass = md5.enryptPassword(password.trim());
-                if (loginModel.checkLogin(email, pass)) {
+                if (loginModel.checkLogin(email, pass)==1) {
+                    // lưu vào session
                     loginModel.getAccount(email,pass);
+
                     loginView.showLoginSuccess("*Đăng nhập thành công!");
                     return true;
-                } else {
+                } else if(loginModel.checkLogin(email, pass)==0){
                     loginView.showLoginFail("*Không tồn tại tài khoản!");
+                    return false;
+                }
+                else {
+                    loginView.showLoginFail("*Sai mật khẩu!");
                     return false;
                 }
             } catch (NoSuchAlgorithmException e) {

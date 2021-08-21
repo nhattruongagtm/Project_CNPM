@@ -14,10 +14,10 @@ public class Dish implements Serializable {
     private ArrayList<Image> img;
     private DateTime dateCreated;
     private int restNumber;
-    private String idCategory;
+    private Category category;
     private int status;
 
-    public Dish(String id, String name, String describe, ArrayList<Size> size, ArrayList<Price> price, ArrayList<PriceSale> priceSale, ArrayList<Image> img, DateTime dateCreated, int restNumber, String idCategory, int status) {
+    public Dish(String id, String name, String describe, ArrayList<Size> size, ArrayList<Price> price, ArrayList<PriceSale> priceSale, ArrayList<Image> img, DateTime dateCreated, int restNumber, Category category, int status) {
         this.id = id;
         this.name = name;
         this.describe = describe;
@@ -27,7 +27,7 @@ public class Dish implements Serializable {
         this.img = img;
         this.dateCreated = dateCreated;
         this.restNumber = restNumber;
-        this.idCategory = idCategory;
+        this.category = category;
         this.status = status;
     }
 
@@ -107,12 +107,12 @@ public class Dish implements Serializable {
         this.restNumber = restNumber;
     }
 
-    public String getIdCategory() {
-        return idCategory;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setIdCategory(String idCategory) {
-        this.idCategory = idCategory;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public int getStatus() {
@@ -135,7 +135,7 @@ public class Dish implements Serializable {
                 ", img=" + img +
                 ", dateCreated=" + dateCreated +
                 ", restNumber=" + restNumber +
-                ", idCategory='" + idCategory + '\'' +
+                ", category='" + category + '\'' +
                 ", status=" + status +
                 '}';
     }

@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.project_cnpm.Database.Database;
 import com.example.project_cnpm.DishesPage.DishDetailView;
+import com.example.project_cnpm.Model.Category;
 import com.example.project_cnpm.Model.DateTime;
 import com.example.project_cnpm.Model.Dish;
 import com.example.project_cnpm.Model.Image;
@@ -62,7 +63,9 @@ public class DishDetailDAO {
                             dish.setDescribe(object.getString("describe"));
                             dish.setDateCreated(new DateTime(object.getString("dateCreated")));
                             dish.setStatus(Integer.parseInt(object.getString("status")));
-                            dish.setIdCategory(object.getString("idCategory"));
+                            Category category = new Category();
+                            category.setIdCategory(object.getString("idCategory"));
+                            dish.setCategory(category);
 
                             DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("get_dish");
                             database.setValue(dish);

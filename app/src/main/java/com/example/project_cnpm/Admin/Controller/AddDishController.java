@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.example.project_cnpm.Admin.AddDishDAO;
 import com.example.project_cnpm.Admin.DishesManagement.AddDishActivity;
+import com.example.project_cnpm.Model.Category;
 import com.example.project_cnpm.Model.Dish;
 import com.example.project_cnpm.Model.Image;
 import com.example.project_cnpm.Model.Price;
@@ -42,7 +43,9 @@ public class AddDishController {
             dish.setId(addDishView.getIdDish());
             dish.setName(name);
             dish.setDescribe(describe);
-            dish.setIdCategory(addDishView.getChooseCategory());
+            Category category = new Category();
+            category.setIdCategory(addDishView.getChooseCategory());
+            dish.setCategory(category);
             dish.setSize(size);
             dish.setPrice(price);
 

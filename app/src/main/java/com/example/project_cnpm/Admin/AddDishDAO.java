@@ -106,7 +106,7 @@ public class AddDishDAO {
                 HashMap<String,String> params = new HashMap<>();
                 params.put("name",dish.getName());
                 params.put("describe",dish.getDescribe());
-                params.put("idCategory",dish.getIdCategory());
+                params.put("idCategory",dish.getCategory().getIdCategory());
                 return params;
             }
         };

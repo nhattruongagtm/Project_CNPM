@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.project_cnpm.Controller.DishDetailController;
@@ -223,6 +224,15 @@ public class DishDetailView extends AppCompatActivity {
             nameSizes.add(dish.getSize().get(dish.getPriceSale().size()-i-1).getIdSize().toUpperCase());
         }
 
+        int percent = dish.getPriceSale().get(0).getPriceSale();
+
+        if(percent > 0){
+            priceSale.setText(dish.getPrice().get(0).getPrice()+"");
+        }
+        else{
+            priceSale.setText("");
+        }
+
 
         for (int i = 0; i < dish.getPrice().size();i++){
 
@@ -240,6 +250,7 @@ public class DishDetailView extends AppCompatActivity {
             int p = prices.get(i);
             int pos = i;
 
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -255,10 +266,29 @@ public class DishDetailView extends AppCompatActivity {
                            CardView size = itemSize.findViewById(R.id.activity_detail_item);
                            size.setCardBackgroundColor(Color.parseColor("#FFF5D7"));
                        }
-                    }
+                   }
 
+                    int ps = 0;
+
+                        if(dish.getPrice().get(pos).getPrice() != prices.get(pos)){
+                            Log.d("GGG",prices.get(pos)+"");
+                            Log.d("GGG",prices.get(pos)+"");
+
+                            ps = dish.getPrice().get(pos).getPrice();
+                        }
+                        else{
+                            ps = 0;
+                        }
+                        if (ps != 0){
+                            priceSale.setText(ps+"");
+                        }
+                        else{
+                            priceSale.setText("");
+                        }
                 }
             });
+
+
         }
         price.setText(prices.get(0)+" VNĐ");
 

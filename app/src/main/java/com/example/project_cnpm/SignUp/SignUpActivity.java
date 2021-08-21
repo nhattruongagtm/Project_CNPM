@@ -22,7 +22,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Controller.SignUpController;
 import com.example.project_cnpm.DAO.SignUpDAO;
-import com.example.project_cnpm.Login.LoginView;
+import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.R;
@@ -68,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity{
         btnChangeLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this, LoginView.class));
+                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {

@@ -37,11 +37,13 @@
 
     import com.example.project_cnpm.View.ILoginView;
     import com.facebook.AccessToken;
+    import com.facebook.AccessTokenTracker;
     import com.facebook.CallbackManager;
     import com.facebook.FacebookCallback;
     import com.facebook.FacebookException;
     import com.facebook.GraphRequest;
     import com.facebook.GraphResponse;
+    import com.facebook.login.LoginManager;
     import com.facebook.login.LoginResult;
     import com.facebook.login.widget.LoginButton;
     import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -59,7 +61,7 @@
     import java.util.HashMap;
     import java.util.Map;
 
-public class LoginView extends AppCompatActivity implements ILoginView {
+public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -98,13 +100,13 @@ public class LoginView extends AppCompatActivity implements ILoginView {
         btnChangeSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginView.this, SignUpActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginView.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         });
         btnSave.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -114,7 +116,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
             }
         });
         if(notify.getText().toString().equals("*Đăng nhập thành công!")){
-            startActivity(new Intent(LoginView.this,MainActivity.class));
+            startActivity(new Intent(LoginActivity.this,MainActivity.class));
             finish();
         }
 
@@ -242,7 +244,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
 
                             //create Account
                             String url = "https://appfooddb.000webhostapp.com/checkAccountAPIUser.php";
-                            RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
+                            RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                                     new Response.Listener<String>() {
                                         @Override
@@ -255,7 +257,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(LoginView.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                                         }
                                     }){
                                 @Nullable
@@ -270,7 +272,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
                             requestQueue.add(stringRequest);
 
                             if (DataLocalManager.getAccount()!= null){
-                                startActivity(new Intent(LoginView.this,MainActivity.class));
+                                startActivity(new Intent(LoginActivity.this,MainActivity.class));
                             }
                             Log.d("AAA", user.toString());
 
@@ -321,7 +323,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
                     else{
                         DataLocalManager.setSaveAccount(null,null);
                     }
-                    startActivity(new Intent(LoginView.this,MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 }
 
             }
@@ -374,18 +376,18 @@ public class LoginView extends AppCompatActivity implements ILoginView {
             handleSignInResult(task);
         }
     }
-    //    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-//        @Override
-//        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-//            if(currentAccessToken == null){
-//                LoginManager.getInstance().logOut();
-//            }
-//        }
-//    };
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+            if(currentAccessToken == null){
+                LoginManager.getInstance().logOut();
+            }
+        }
+    };
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //  accessTokenTracker.startTracking();
+          accessTokenTracker.startTracking();
     }
     public void loginGoogle(){
         signInButton = findViewById(R.id.sign_in_button);
@@ -417,7 +419,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
             user.setEmail(account.getEmail());
             Customer customer = new Customer();
             customer.setUser(user);
-            Log.d("ZZZ", customer+"-------aaaaa");
+            Log.d("ZZZZ", account+"");
             customer.setIdCustomer(account.getId());
             customer.setName(account.getDisplayName());
             customer.setAvatar(account.getPhotoUrl()+"");
@@ -427,7 +429,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
 
             //createAccount
             String url = "https://appfooddb.000webhostapp.com/checkAccountAPIUser.php";
-            RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
+            RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -442,7 +444,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(LoginView.this, error.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }){
                 @Nullable
@@ -462,11 +464,21 @@ public class LoginView extends AppCompatActivity implements ILoginView {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("AAA", "signInResult:failed code=" + e.getStatusCode());
+            if( e.getStatusCode()==12502){
+                /*
+                 * https://github.com/googlesamples/google-services/issues/345
+                 */
+                GoogleSignInAccount accountOld = GoogleSignIn.getLastSignedInAccount(this.getApplicationContext());
+                if (accountOld != null) {
+                    Toast.makeText(LoginActivity.this, "ok", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
+
     public void createAccount(String idCustomer, String name, String img){
         String url = "https://appfooddb.000webhostapp.com/createAccountForAPIUser.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -497,7 +509,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
     }
     public void checkIdCustomer(String id){
         String url = "";
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -534,7 +546,7 @@ public class LoginView extends AppCompatActivity implements ILoginView {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginView.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
         requestQueue.add(stringRequest);

@@ -40,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -162,8 +163,16 @@ public class DishesView extends Fragment implements View.OnClickListener, DishVi
         this.recyclerView = recyclerView;
     }
 
-    public RecyclerView showDishes(){
-        return recyclerView;
+    public void showDishes(ArrayList<DishItem> dishes){
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
+
+        DishesPageApdater adapter = new DishesPageApdater(this.getContext(),dishes);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
+
+
 
 }

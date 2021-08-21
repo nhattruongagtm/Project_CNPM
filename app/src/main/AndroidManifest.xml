@@ -38,7 +38,7 @@
         <activity android:name=".Wishlist.WishlistActivity" />
         <activity android:name=".Slide.SlideActivity" />
         <activity android:name=".SignUp.SignUpActivity" />
-        <activity android:name=".Login.LoginView" />
+        <activity android:name=".Login.LoginActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Admin.AdminPage"/>
         <meta-data

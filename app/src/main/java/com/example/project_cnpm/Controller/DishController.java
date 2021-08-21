@@ -34,14 +34,7 @@ public class DishController {
                 if (msg.what == 25){
                     Bundle bundle = msg.getData();
                     ArrayList<DishItem> dishes = (ArrayList<DishItem>) bundle.getSerializable("dishes");
-
-                    dishView.showDishes().setHasFixedSize(true);
-                    dishView.showDishes().setLayoutManager(new GridLayoutManager(dishView.getContext(), 2));
-
-                    DishesPageApdater adapter = new DishesPageApdater(dishView.getContext(),dishes);
-                    dishView.showDishes().setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-
+                    dishView.showDishes(dishes);
                 }
             }
         };

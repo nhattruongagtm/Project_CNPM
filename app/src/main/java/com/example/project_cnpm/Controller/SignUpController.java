@@ -8,7 +8,7 @@ import android.os.Message;
 import androidx.annotation.NonNull;
 
 import com.example.project_cnpm.DAO.SignUpDAO;
-import com.example.project_cnpm.Login.LoginView;
+import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.MD5.MD5;
 import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.SignUp.SignUpActivity;
@@ -66,7 +66,7 @@ public class SignUpController implements ISignUpController{
                                    signUpView.showSignUpSuccess("Đăng ký thành công!");
                                    signUpModel.sendMail(email);
 
-                                   Intent intent = new Intent(signUpView, LoginView.class);
+                                   Intent intent = new Intent(signUpView, LoginActivity.class);
                                    intent.putExtra("email_signup",email);
                                    signUpView.startActivity(intent);
                                }

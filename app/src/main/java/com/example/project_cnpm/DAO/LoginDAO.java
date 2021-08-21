@@ -10,7 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.project_cnpm.Database.Database;
-import com.example.project_cnpm.Login.LoginView;
+import com.example.project_cnpm.Login.LoginActivity;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
@@ -28,19 +28,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginDAO {
-    private LoginView context;
+    private LoginActivity context;
 
-    public LoginDAO(LoginView context) {
+    public LoginDAO(LoginActivity context) {
         this.context = context;
     }
 
-    public boolean checkLogin(String email,String password){
+    public int checkLogin(String email,String password){
         for (Map.Entry<String,String> m : context.accounts.entrySet()){
             if(email.equals(m.getKey())& password.equals(m.getValue())){
-                return true;
+                return 1;
+            }
+            else if(email.equals(m.getKey())& !password.equals(m.getValue())){
+                return -1;
             }
         }
-        return false;
+        return 0;
     }
     public void getAccount(String email, String password) {
         Customer account = new Customer();
