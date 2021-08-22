@@ -15,7 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.project_cnpm.Database.Database;
 import com.example.project_cnpm.Model.User;
-import com.example.project_cnpm.View.SignUp.SignUpActivity;
+import com.example.project_cnpm.View.SignUp.SignUpView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +40,7 @@ import javax.mail.internet.MimeMessage;
 
 
 public class SignUpDAO {
-    SignUpActivity context;
+    SignUpView context;
 
     public HashMap<String, String> accounts = new HashMap<>();
     public ArrayList<User> acc = new ArrayList<>();
@@ -48,7 +48,7 @@ public class SignUpDAO {
     String idCustomer = "";
     public Handler handler;
 
-    public SignUpDAO(SignUpActivity context) {
+    public SignUpDAO(SignUpView context) {
         this.context = context;
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("account");
@@ -321,11 +321,11 @@ public class SignUpDAO {
         }
     }
 
-    public SignUpActivity getContext() {
+    public SignUpView getContext() {
         return context;
     }
 
-    public void setContext(SignUpActivity context) {
+    public void setContext(SignUpView context) {
         this.context = context;
     }
 

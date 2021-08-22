@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.project_cnpm">
+    package="com.example.project_cnpm" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".SharedReferences.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/background"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:theme="@style/Theme.Project_CNPM"
+        android:usesCleartextTraffic="true" >
 
-        android:theme="@style/Theme.Project_CNPM">
-        <activity android:name=".Admin.LoginAdminActivity"></activity>
+        <activity android:name=".Admin.LoginAdminActivity" />
         <activity android:name=".View.DishesPage.DishDetailView" />
-        <activity android:name=".Admin.DishesManagement.DishActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+        <activity android:name=".Admin.DishesManagement.DishActivity" >
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".Admin.DishesManagement.AddDishActivity"/>
-        <activity android:name=".View.FlashScreen.FlashScreen">
+        <activity android:name=".Admin.DishesManagement.AddDishActivity" />
+        <activity android:name=".View.FlashScreen.FlashScreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".View.Wishlist.WishlistActivity" />
         <activity android:name=".View.Slide.SlideActivity" />
-        <activity android:name=".View.SignUp.SignUpActivity" />
-        <activity android:name=".View.Login.LoginView" />
+        <activity android:name=".View.SignUp.SignUpView" />
+        <activity android:name=".View.Login.LoginActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".Admin.AdminPage"/>
+        <activity android:name=".Admin.AdminPage" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

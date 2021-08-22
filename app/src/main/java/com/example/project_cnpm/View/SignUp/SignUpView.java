@@ -22,7 +22,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Controller.SignUpController;
 import com.example.project_cnpm.DAO.SignUpDAO;
-import com.example.project_cnpm.View.Login.LoginView;
+import com.example.project_cnpm.View.Login.LoginActivity;
 import com.example.project_cnpm.MainActivity;
 import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.R;
@@ -40,7 +40,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class SignUpActivity extends AppCompatActivity{
+public class SignUpView extends AppCompatActivity{
     TextView btnChangeLogin;
     LinearLayout btnBack;
 
@@ -68,13 +68,13 @@ public class SignUpActivity extends AppCompatActivity{
         btnChangeLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this, LoginView.class));
+                startActivity(new Intent(SignUpView.this, LoginActivity.class));
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                startActivity(new Intent(SignUpView.this, MainActivity.class));
             }
         });
         btnSignUp.setOnClickListener(new View.OnClickListener() {
@@ -87,15 +87,13 @@ public class SignUpActivity extends AppCompatActivity{
                 if(mail.equals("") && pass.equals("") && repass.equals("")){
                     showSignUpFail("*Vui lòng nhập đủ thông tin!");
                 }
-                else if (!cb.isChecked()){
-                    showSignUpFail("*Vui lòng chấp nhận thỏa thuận của chúng tôi!");
+                else if(!cb.isChecked() && !mail.equals("") && !pass.equals("") && !repass.equals("") && repass.equals(pass) && pass.length() >= 8){
+                    showSignUpFail("*Vui lòng chấp nhận thỏa thuận!");
                 }
-                else if(!pass.equals(repass)){
-                    showSignUpFail("*Mật khẩu không khớp!");
+                else {
+                    signUpController.signup(mail,pass,repass);
                 }
-                else{
-                    signUpController.signup(mail,pass);
-                }
+
             }
         });
     }
@@ -122,7 +120,7 @@ public class SignUpActivity extends AppCompatActivity{
             }
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                Toast.makeText(SignUpActivity.this, "Lỗi firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpView.this, "Lỗi firebase", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -146,7 +144,7 @@ public class SignUpActivity extends AppCompatActivity{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SignUpActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpView.this, error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
         requestQueue.add(stringRequest);
