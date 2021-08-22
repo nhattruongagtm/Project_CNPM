@@ -5,12 +5,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.project_cnpm.DAO.DishDAO;
-import com.example.project_cnpm.DishesPage.DishItem;
-import com.example.project_cnpm.DishesPage.DishesView;
-import com.example.project_cnpm.DishesPage.DishesPageApdater;
+import com.example.project_cnpm.View.DishesPage.DishItem;
+import com.example.project_cnpm.View.DishesPage.DishesView;
 
 import java.util.ArrayList;
 

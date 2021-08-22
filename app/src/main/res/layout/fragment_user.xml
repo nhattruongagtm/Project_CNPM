@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="645dp"
-    tools:context=".HomePage.UserFragment">
+    tools:context=".View.HomePage.UserFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <FrameLayout

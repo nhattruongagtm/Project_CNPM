@@ -1,4 +1,4 @@
-package com.example.project_cnpm.HomePage;
+package com.example.project_cnpm.View.HomePage;
 
 public class Dish {
     private String id;

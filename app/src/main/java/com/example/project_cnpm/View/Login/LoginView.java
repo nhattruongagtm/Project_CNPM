@@ -1,5 +1,5 @@
 
-    package com.example.project_cnpm.Login;
+    package com.example.project_cnpm.View.Login;
 
     import androidx.annotation.Nullable;
     import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +33,7 @@
     import com.example.project_cnpm.Model.User;
     import com.example.project_cnpm.R;
     import com.example.project_cnpm.SharedReferences.DataLocalManager;
-    import com.example.project_cnpm.SignUp.SignUpActivity;
+    import com.example.project_cnpm.View.SignUp.SignUpActivity;
 
     import com.example.project_cnpm.View.ILoginView;
     import com.facebook.AccessToken;
@@ -61,7 +61,7 @@
     import java.util.HashMap;
     import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity implements ILoginView {
+public class LoginView extends AppCompatActivity implements ILoginView {
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -100,13 +100,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         btnChangeSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                startActivity(new Intent(LoginView.this, SignUpActivity.class));
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginView.this, MainActivity.class));
             }
         });
         btnSave.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             }
         });
         if(notify.getText().toString().equals("*Đăng nhập thành công!")){
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            startActivity(new Intent(LoginView.this,MainActivity.class));
             finish();
         }
 
@@ -244,7 +244,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
                             //create Account
                             String url = "https://appfooddb.000webhostapp.com/checkAccountAPIUser.php";
-                            RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+                            RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                                     new Response.Listener<String>() {
                                         @Override
@@ -257,7 +257,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LoginView.this, error.toString(), Toast.LENGTH_SHORT).show();
                                         }
                                     }){
                                 @Nullable
@@ -272,7 +272,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                             requestQueue.add(stringRequest);
 
                             if (DataLocalManager.getAccount()!= null){
-                                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                                startActivity(new Intent(LoginView.this,MainActivity.class));
                             }
                             Log.d("AAA", user.toString());
 
@@ -323,7 +323,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                     else{
                         DataLocalManager.setSaveAccount(null,null);
                     }
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    startActivity(new Intent(LoginView.this,MainActivity.class));
                 }
 
             }
@@ -429,7 +429,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
             //createAccount
             String url = "https://appfooddb.000webhostapp.com/checkAccountAPIUser.php";
-            RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+            RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -444,7 +444,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginView.this, error.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }){
                 @Nullable
@@ -470,7 +470,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                  */
                 GoogleSignInAccount accountOld = GoogleSignIn.getLastSignedInAccount(this.getApplicationContext());
                 if (accountOld != null) {
-                    Toast.makeText(LoginActivity.this, "ok", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginView.this, "ok", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -478,7 +478,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     public void createAccount(String idCustomer, String name, String img){
         String url = "https://appfooddb.000webhostapp.com/createAccountForAPIUser.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -509,7 +509,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
     public void checkIdCustomer(String id){
         String url = "";
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginView.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -546,7 +546,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginView.this, error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
         requestQueue.add(stringRequest);

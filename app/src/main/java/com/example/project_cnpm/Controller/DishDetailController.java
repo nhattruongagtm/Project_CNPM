@@ -8,7 +8,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.project_cnpm.DAO.DishDetailDAO;
-import com.example.project_cnpm.DishesPage.DishDetailView;
+import com.example.project_cnpm.View.DishesPage.DishDetailView;
 import com.example.project_cnpm.Model.Dish;
 
 

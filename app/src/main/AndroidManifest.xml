@@ -19,7 +19,7 @@
 
         android:theme="@style/Theme.Project_CNPM">
         <activity android:name=".Admin.LoginAdminActivity"></activity>
-        <activity android:name=".DishesPage.DishDetailView" />
+        <activity android:name=".View.DishesPage.DishDetailView" />
         <activity android:name=".Admin.DishesManagement.DishActivity">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
@@ -28,17 +28,17 @@
 <!--            </intent-filter>-->
         </activity>
         <activity android:name=".Admin.DishesManagement.AddDishActivity"/>
-        <activity android:name=".FlashScreen">
+        <activity android:name=".View.FlashScreen.FlashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Wishlist.WishlistActivity" />
-        <activity android:name=".Slide.SlideActivity" />
-        <activity android:name=".SignUp.SignUpActivity" />
-        <activity android:name=".Login.LoginActivity" />
+        <activity android:name=".View.Wishlist.WishlistActivity" />
+        <activity android:name=".View.Slide.SlideActivity" />
+        <activity android:name=".View.SignUp.SignUpActivity" />
+        <activity android:name=".View.Login.LoginView" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Admin.AdminPage"/>
         <meta-data

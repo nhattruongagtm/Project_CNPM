@@ -1,4 +1,4 @@
-package com.example.project_cnpm.DishesPage;
+package com.example.project_cnpm.View.DishesPage;
 
 import android.content.Context;
 import android.content.Intent;

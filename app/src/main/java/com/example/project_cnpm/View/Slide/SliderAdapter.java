@@ -1,4 +1,4 @@
-package com.example.project_cnpm.Slide;
+package com.example.project_cnpm.View.Slide;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;

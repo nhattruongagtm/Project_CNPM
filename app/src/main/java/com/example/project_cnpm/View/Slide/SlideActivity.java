@@ -1,9 +1,8 @@
-package com.example.project_cnpm.Slide;
+package com.example.project_cnpm.View.Slide;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;

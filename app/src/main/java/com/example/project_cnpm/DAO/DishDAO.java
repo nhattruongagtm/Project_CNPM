@@ -14,8 +14,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.project_cnpm.Database.Database;
-import com.example.project_cnpm.DishesPage.DishItem;
-import com.example.project_cnpm.DishesPage.DishesView;
+import com.example.project_cnpm.View.DishesPage.DishItem;
+import com.example.project_cnpm.View.DishesPage.DishesView;
 
 import org.json.JSONArray;
 import org.json.JSONException;

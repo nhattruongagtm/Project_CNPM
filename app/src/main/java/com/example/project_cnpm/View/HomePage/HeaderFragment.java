@@ -1,4 +1,4 @@
-package com.example.project_cnpm.HomePage;
+package com.example.project_cnpm.View.HomePage;
 
 import android.app.Dialog;
 import android.content.Intent;

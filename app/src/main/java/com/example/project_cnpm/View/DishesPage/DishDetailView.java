@@ -1,10 +1,12 @@
-package com.example.project_cnpm.DishesPage;
+package com.example.project_cnpm.View.DishesPage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,13 +16,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.project_cnpm.Controller.DishDetailController;
 import com.example.project_cnpm.DAO.DishDetailDAO;
 import com.example.project_cnpm.Model.Dish;
 import com.example.project_cnpm.R;
+import com.example.project_cnpm.Utility.NetworkChangeListener;
 
 import java.util.ArrayList;
 
@@ -36,6 +38,7 @@ public class DishDetailView extends AppCompatActivity {
     private LinearLayout sizes;
     private TextView nameSize;
     private CardView sizeItem;
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
 
     public Dish getDish() {
@@ -294,5 +297,18 @@ public class DishDetailView extends AppCompatActivity {
 
         numberImg.setText(dish.getImg().size()+"");
         Glide.with(this).load(dish.getImg().get(0).getLinkImage()).into(img);
+    }
+
+    @Override
+    protected void onStart() {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }

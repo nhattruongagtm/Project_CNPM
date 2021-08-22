@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".DishesPage.DishDetailView">
+    tools:context=".View.DishesPage.DishDetailView">
     <FrameLayout
         android:id="@+id/background_detail"
         android:background="#E0FFBD"
@@ -91,7 +91,7 @@
                         <TextView
                             android:layout_weight="2"
                             android:textStyle="bold"
-                            android:text="4.7"
+                            android:text="0"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
@@ -129,7 +129,7 @@
                         <TextView
                             android:layout_weight="2"
                             android:textStyle="bold"
-                            android:text="200"
+                            android:text="0"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
@@ -167,7 +167,7 @@
                             android:id="@+id/activity_detail_number_img"
                             android:layout_weight="2"
                             android:textStyle="bold"
-                            android:text="5"
+                            android:text="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView

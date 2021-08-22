@@ -10,7 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.project_cnpm.Database.Database;
-import com.example.project_cnpm.Login.LoginActivity;
+import com.example.project_cnpm.View.Login.LoginView;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.Model.User;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
@@ -28,9 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginDAO {
-    private LoginActivity context;
+    private LoginView context;
 
-    public LoginDAO(LoginActivity context) {
+    public LoginDAO(LoginView context) {
         this.context = context;
     }
 

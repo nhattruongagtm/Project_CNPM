@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
-import com.example.project_cnpm.DishesPage.DishesView;
-import com.example.project_cnpm.HomePage.HomeFragment;
-import com.example.project_cnpm.HomePage.UserFragment;
+import com.example.project_cnpm.View.DishesPage.DishesView;
+import com.example.project_cnpm.View.HomePage.HomeFragment;
+import com.example.project_cnpm.View.HomePage.UserFragment;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
 import com.example.project_cnpm.Utility.NetworkChangeListener;

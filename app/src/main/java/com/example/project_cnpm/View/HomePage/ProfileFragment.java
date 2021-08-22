@@ -1,4 +1,4 @@
-package com.example.project_cnpm.HomePage;
+package com.example.project_cnpm.View.HomePage;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.project_cnpm.Login.LoginActivity;
+import com.example.project_cnpm.View.Login.LoginView;
 import com.example.project_cnpm.R;
 import com.example.project_cnpm.Model.Customer;
 import com.example.project_cnpm.SharedReferences.DataLocalManager;
@@ -120,7 +120,7 @@ public class ProfileFragment extends Fragment {
                     }
                 });
         DataLocalManager.setAccount(null);
-        startActivity(new Intent(getActivity(), LoginActivity.class));
+        startActivity(new Intent(getActivity(), LoginView.class));
     }
     //login google
     public void googleAPI(){

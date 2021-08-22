@@ -1,50 +1,24 @@
-package com.example.project_cnpm.DishesPage;
+package com.example.project_cnpm.View.DishesPage;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.service.controls.Control;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Controller.DishController;
 import com.example.project_cnpm.DAO.DishDAO;
-import com.example.project_cnpm.Database.Database;
-import com.example.project_cnpm.Model.DateTime;
-import com.example.project_cnpm.Model.Dish;
 import com.example.project_cnpm.Model.DishView;
-import com.example.project_cnpm.Model.Price;
-import com.example.project_cnpm.Model.Size;
 import com.example.project_cnpm.R;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 
 public class DishesView extends Fragment implements View.OnClickListener, DishView {
