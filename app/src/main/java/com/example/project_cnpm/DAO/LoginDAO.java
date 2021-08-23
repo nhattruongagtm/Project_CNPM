@@ -1,14 +1,18 @@
 package com.example.project_cnpm.DAO;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.project_cnpm.Database.Database;
 import com.example.project_cnpm.View.Login.LoginActivity;
 import com.example.project_cnpm.Model.Customer;
@@ -20,6 +24,7 @@ import com.example.project_cnpm.SharedReferences.DataLocalManager;
 //import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -110,4 +115,66 @@ public class LoginDAO {
             Database.getInstance(context).excuteQuery(jsonArrayRequest);
         }
     }
+    public void createAccount(String idCustomer, String name, String img){
+        String url = "https://appfooddb.000webhostapp.com/createAccountForAPIUser.php";
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("ZZZ",idCustomer+" "+name+" "+img);
+                        Log.d("ZZZ", "getAccount "+ response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+            @Nullable
+            @org.jetbrains.annotations.Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("idCustomer",idCustomer);
+                params.put("nameCustomer",name);
+                params.put("imgCustomer",img);
+
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+    public boolean checkIdCustomer(String id){
+        String url = "https://appfooddb.000webhostapp.com/checkAccountAPIUser.php";
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.trim().equals("false")){
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("idCustomer",id);
+                return params;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+        return false;
+    }
+
 }

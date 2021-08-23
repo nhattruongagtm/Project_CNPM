@@ -62,7 +62,6 @@ public class SignUpView extends AppCompatActivity{
         getAllAccount();
         getAccountFirebase();
 
-
         signUpController = new SignUpController(this,new SignUpDAO(this));
 
         btnChangeLogin.setOnClickListener(new View.OnClickListener() {

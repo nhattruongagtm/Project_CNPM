@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     private CheckBox btnSave;
     private TextView notify;
     private boolean saveInput;
+    LoginDAO dao = new LoginDAO(this);
 
 
     @Override
@@ -91,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         mapping();
         getAllAccount();
 
-        loginController = new LoginController(this,new LoginDAO(this));
+        loginController = new LoginController(this,dao);
 
         btnChangeSignUp = findViewById(R.id.changeSignUp);
         btnBack = findViewById(R.id.btnBack_hompage);
@@ -114,10 +115,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 saveInput = isChecked;
             }
         });
-        if(notify.getText().toString().equals("*Đăng nhập thành công!")){
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-            finish();
-        }
 
         if(DataLocalManager.getLoginInput() != null) {
             String m = "", p = "";
@@ -182,7 +179,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                                         @Override
                                         public void onResponse(String response) {
                                             if(response.trim().equals("false")){
-                                                createAccount(id,name,avatar);
+                                                dao.createAccount(id,name,avatar);
                                             }
                                         }
                                     },
@@ -221,12 +218,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 graphRequest.setParameters(bundle);
                 graphRequest.executeAsync();
 
-//                if (DataLocalManager.getAccount()!= null){
-//                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
-//                }
-
                 Log.d("AAA","Login successful!");
-                //  Log.d("AAA",account.getName());
             }
 
             @Override
@@ -258,6 +250,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                         DataLocalManager.setSaveAccount(null,null);
                     }
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    finish();
                 }
 
             }
@@ -279,49 +272,18 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode,data);
         super.onActivityResult(requestCode, resultCode, data);
-        //facebook
-//        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-//            @Override
-//            public void onCompleted(JSONObject object, GraphResponse response) {
-//                Log.d("AAA",object.toString());
-//                try {
-//                    String name = object.getString("name");
-//                    Log.d("XXX",name);
-//
-//                }
-//                catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//        Bundle bundle= new Bundle();
-//        bundle.putString("fields","gender, name, id, first_name, last_name");
-//        graphRequest.setParameters(bundle);
-//        graphRequest.executeAsync();
-
-
 
         // google
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
     }
-//        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-//        @Override
-//        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-//            if(currentAccessToken == null){
-//                LoginManager.getInstance().logOut();
-//            }
-//        }
-//    };
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//          accessTokenTracker.startTracking();
     }
     public void loginGoogle(){
         signInButton = findViewById(R.id.sign_in_button);
@@ -332,7 +294,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                     case R.id.sign_in_button:
                         signIn();
                         break;
-                    // ...
                 }
             }
         });
@@ -371,7 +332,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                             if(response.trim().equals("false")){
                                 Log.d("ZZZ",response);
                                 Log.d("ZZZ",account.getId()+" "+account.getDisplayName()+" "+account.getPhotoUrl()+"");
-                                createAccount(account.getId(),account.getDisplayName(),account.getPhotoUrl()+"");
+                                if(!dao.checkIdCustomer(account.getId())){
+                                    dao.createAccount(account.getId(),account.getDisplayName(),account.getPhotoUrl()+"");
+                                }
                             }
                         }
                     },
@@ -399,9 +362,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("AAA", "signInResult:failed code=" + e.getStatusCode());
             if( e.getStatusCode()==12502){
-                /*
-                 * https://github.com/googlesamples/google-services/issues/345
-                 */
                 GoogleSignInAccount accountOld = GoogleSignIn.getLastSignedInAccount(this.getApplicationContext());
                 if (accountOld != null) {
                     Toast.makeText(LoginActivity.this, "ok", Toast.LENGTH_SHORT).show();
@@ -410,56 +370,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         }
     }
 
-    public void createAccount(String idCustomer, String name, String img){
-        String url = "https://appfooddb.000webhostapp.com/createAccountForAPIUser.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("ZZZ",idCustomer+" "+name+" "+img);
-                        Log.d("ZZZ", "getAccount "+ response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }){
-            @Nullable
-            @org.jetbrains.annotations.Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> params = new HashMap<>();
-                params.put("idCustomer",idCustomer);
-                params.put("nameCustomer",name);
-                params.put("imgCustomer",img);
-
-                return params;
-            }
-        };
-        requestQueue.add(stringRequest);
-    }
-    public void checkIdCustomer(String id){
-        String url = "";
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(response.trim().equals("false")){
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-        requestQueue.add(stringRequest);
-    }
     public void getAllAccount(){
         String url = "https://appfooddb.000webhostapp.com/getAllAccount.php";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
